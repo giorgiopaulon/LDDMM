@@ -17,7 +17,7 @@ Paulon, G., Llanos, F., Chandrasekaran, B., Sarkar, A. (2021). [Bayesian semipar
 To install the package in R, first install the `devtools` package, and then use the commands
 `````````
 library(devtools)
-install_github('giorgiopaulon/lddmm', subdir="R_pkg/")
+install_github('giorgiopaulon/lddmm')
 `````````
 
 ### Contact
