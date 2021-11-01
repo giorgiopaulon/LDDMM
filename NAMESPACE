@@ -1,0 +1,9 @@
+useDynLib(lddmm, .registration=TRUE)
+importFrom(Rcpp, evalCpp)
+importFrom("stats", "dgamma", "rnorm", "runif", "sd", "setNames", "quantile")
+importFrom("utils", "data", "setTxtProgressBar", "txtProgressBar")
+importFrom('dplyr', '%>%')
+export("B_basis", "data",
+       "extract_post_draws", "extract_post_mean", "H_ball",
+       "LDDMM", "log_likelihood", "P_smooth1", "plot_accuracy", 
+       "plot_post_pars", "plot_RT")

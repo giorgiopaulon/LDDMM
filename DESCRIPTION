@@ -1,0 +1,15 @@
+Package: lddmm
+Type: Package
+Title: Longitudinal Drift-Diffusion Mixed Models (LDDMM)
+Version: 0.1
+Date: 2021-09-28
+Authors@R: person("Giorgio", "Paulon", email = "giorgio.paulon@utexas.edu",
+                  role = c("aut", "cre"))
+Description: Code implementing the DDM model as described in Paulon et al. (2021).
+License: GPL-3
+Encoding: UTF-8
+Imports: Rcpp (>= 1.0.6), RcppArmadillo, RcppProgress, rgen, gtools, LaplacesDemon, dplyr, plyr, ggplot2, latex2exp, RColorBrewer
+LazyData: true
+LinkingTo: Rcpp, RcppArmadillo, RcppProgress, rgen
+RoxygenNote: 7.1.2
+Roxygen: list(markdown = TRUE)
