@@ -20,6 +20,50 @@ library(devtools)
 install_github('giorgiopaulon/lddmm')
 `````````
 
+### Usage
+
+The following is a minimal example of a simple model fit. 
+
+``` r
+# Load libraries
+library(RColorBrewer)
+library(tidyverse)
+library(reshape2)
+library(latex2exp)
+library(lddmm)
+
+theme_set(theme_bw(base_size = 14))
+cols <- brewer.pal(9, "Set1")
+
+# Load the data
+data('data')
+  
+# Descriptive plots
+plot_accuracy(data)
+plot_RT(data)
+
+# Run the model
+hypers <- NULL
+hypers$s_sigma_mu <- hypers$s_sigma_b <- 0.1
+
+Niter <- 2500
+burnin <- 1500
+thin <- 2
+samp_size <- (Niter - burnin) / thin
+
+set.seed(123)
+fit <- LDDMM(data = data, 
+             hypers = hypers, 
+             fix_pars = NULL, 
+             Niter = Niter, 
+             burnin = burnin, 
+             thin = thin)
+
+# Plot the results
+plot_post_pars(data, fit, par = 'drift')
+plot_post_pars(data, fit, par = 'boundary')
+```
+
 ### Contact
 
 For bug reporting purposes, e-mail Giorgio Paulon (giorgio.paulon@utexas.edu).
