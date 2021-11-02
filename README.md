@@ -12,6 +12,12 @@ The main function is `LDDMM`; please see the following vignette for details, as 
 
 Paulon, G., Llanos, F., Chandrasekaran, B., Sarkar, A. (2021). [Bayesian semiparametric longitudinal drift-diffusion mixed models for tone learning in adults](https://www.tandfonline.com/doi/abs/10.1080/01621459.2020.1801448?journalCode=uasa20). Journal of the American Statistical Association **116**, 1114-1127
 
+The data included in this package was analyzed in: 
+
+Roark, C. L., Paulon, G., Sarkar, A., Chandrasekaran, B. (2021). [Comparing perceptual category learning across modalities in the same individuals](https://link.springer.com/article/10.3758/s13423-021-01878-0). Psychonomic Bulletin & Review **28**, 898-909
+
+and is available [here](https://osf.io/msnq2/).
+
 ### Installation
 
 To install the package in R, first install the `devtools` package, and then use the commands
