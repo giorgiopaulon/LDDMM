@@ -54,9 +54,11 @@ plot_RT(data)
 hypers <- NULL
 hypers$s_sigma_mu <- hypers$s_sigma_b <- 0.1
 
-Niter <- 2500
-burnin <- 1500
-thin <- 2
+# Change the number of iterations when running the model
+# Here the number is small so that the code can run in less than 5 minutes
+Niter <- 250
+burnin <- 150
+thin <- 1
 samp_size <- (Niter - burnin) / thin
 
 set.seed(123)
@@ -71,6 +73,8 @@ fit <- LDDMM(data = data,
 plot_post_pars(data, fit, par = 'drift')
 plot_post_pars(data, fit, par = 'boundary')
 ```
+
+To extract relevant posterior draws or posterior summaries instead of simply plotting them, one can use the functions `extract_post_mean` or `extract_post_draws`. 
 
 ### Questions or bugs
 
