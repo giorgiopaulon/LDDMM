@@ -5,6 +5,8 @@ Version: 0.1
 Date: 2021-09-28
 Authors@R: person("Giorgio", "Paulon", email = "giorgio.paulon@utexas.edu",
                   role = c("aut", "cre"))
+           person("Abhra", "Sarkar", email = "abhra.sarkar@utexas.edu",
+                  role = c("aut", "ctb"))
 Description: Code implementing the DDM model as described in Paulon et al. (2021).
 License: GPL-3
 Encoding: UTF-8
