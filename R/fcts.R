@@ -26,6 +26,8 @@ require(plyr)
 #' @return individual and population level raw accuracies
 plot_accuracy <- function(data){
   
+  block = d = s = cens = subject = tally = n = freq = NULL
+  
   data_aggr <- data %>%
     dplyr::filter(cens == 0) %>%
     dplyr::group_by(block, s, d) %>% 
@@ -71,6 +73,8 @@ plot_accuracy <- function(data){
 #' * cens: vector of size n containing the censoring indicators (1 censored, 0 non censored)
 #' @return population level raw response times
 plot_RT <- function(data){
+  
+  mean_r_time = block = d = s = cens = r_time = NULL
   
   data %>%
     dplyr::filter(cens == 0) %>%
@@ -200,7 +204,7 @@ H_ball <- function(x, S, r){
         vec <- c(vec, (1:S)[-x[index[i,j]]])
       }
       prop_col <- t(gtools::permutations(n = length(unique(vec)), r = m, 
-                                 v = vec, repeats.allowed = TRUE))
+                                         v = vec, repeats.allowed = TRUE))
       keep_col <- prop_col[,which(colSums(prop_col != x[index[,j]]) == m)]
       HB_diff[index[,j], ((j-1)*(card_m[m+1]/ncol(index))+1):(j*card_m[m+1]/ncol(index))] <- keep_col
     }
@@ -2846,6 +2850,8 @@ LDDMM_fix_bound <- function(data, hypers, Niter = 5000, burnin = 2000, thin = 5)
 #' * par_s_d, ...: posterior means for the requested parameters
 extract_post_mean = function(data, fit, par = c('drift', 'boundary')){
   
+  block = d = s = subject = value = NULL
+  
   if (par == 'drift'){
     post_mean <- apply(fit$post_ind_mu, 1:4, mean)
   }
@@ -2856,10 +2862,10 @@ extract_post_mean = function(data, fit, par = c('drift', 'boundary')){
   T_min <- min(data$block)
   T_max <- max(data$block)
   
-  estimated_pars <- tibble(melt(post_mean, varnames = c('block', 'subject', 's', 'd'))) %>% 
+  estimated_pars <- dplyr::tibble(reshape2::melt(post_mean, varnames = c('block', 'subject', 's', 'd'))) %>% 
     dplyr::filter(s == d) %>% 
-    mutate(block = (T_min:T_max)[block], 
-           subject = plyr::mapvalues(factor(subject), from = levels(factor(subject)), to = levels(factor(data$subject)))) %>%  
+    dplyr::mutate(block = (T_min:T_max)[block], 
+                  subject = plyr::mapvalues(factor(subject), from = levels(factor(subject)), to = levels(factor(data$subject)))) %>%  
     pivot_wider(names_from = c(s, d), 
                 values_from = value, 
                 names_prefix = paste0(par, '_'))
@@ -2889,6 +2895,8 @@ extract_post_mean = function(data, fit, par = c('drift', 'boundary')){
 #' * par_s_d, ...: posterior draws for the requested parameters
 extract_post_draws = function(data, fit, par = c('drift', 'boundary')){
   
+  block = d = s = subject = value = NULL
+  
   if (par == 'drift'){
     post_draw <- fit$post_ind_mu
   }
@@ -2901,10 +2909,10 @@ extract_post_draws = function(data, fit, par = c('drift', 'boundary')){
   T_min <- min(data$block)
   T_max <- max(data$block)
   
-  draw_pars <- tibble(melt(post_draw, varnames = c('block', 'subject', 's', 'd', 'draw'))) %>% 
+  draw_pars <- dplyr::tibble(reshape2::melt(post_draw, varnames = c('block', 'subject', 's', 'd', 'draw'))) %>% 
     dplyr::filter(s == d) %>% 
-    mutate(block = (T_min:T_max)[block], 
-           subject = plyr::mapvalues(factor(subject), from = levels(factor(subject)), to = levels(factor(data$subject)))) %>%  
+    dplyr::mutate(block = (T_min:T_max)[block], 
+                  subject = plyr::mapvalues(factor(subject), from = levels(factor(subject)), to = levels(factor(data$subject)))) %>%  
     pivot_wider(names_from = c(s, d), 
                 values_from = value, 
                 names_prefix = paste0(par, '_'))
@@ -2929,6 +2937,8 @@ extract_post_draws = function(data, fit, par = c('drift', 'boundary')){
 #' @return posterior mean and 95% CI
 plot_post_pars = function(data, fit, par = c('drift', 'boundary')){
   
+  Var1 = Var3 = low = mean_r_time = upp = value = NULL 
+  
   if (par == 'drift'){
     post_draw <- fit$post_mean_mu
     tex_string <- "$\\mu_{d,s}(t)$"
@@ -2941,11 +2951,11 @@ plot_post_pars = function(data, fit, par = c('drift', 'boundary')){
   K <- max(data$block) - min(data$block) + 1
   xgrid <- seq(min(data$block), max(data$block), by = 1)
   
-  post_mean <- melt(apply(post_draw, 1:3, mean))
-  post_quant <- melt(apply(post_draw, 1:3, quantile, probs = 0.05))
+  post_mean <- reshape2::melt(apply(post_draw, 1:3, mean))
+  post_quant <- reshape2::melt(apply(post_draw, 1:3, quantile, probs = 0.05))
   post_mean$Var1 <- rep(xgrid, nrow(post_mean)/length(xgrid))
   post_mean$low <- post_quant$value
-  post_quant <- melt(apply(post_draw, 1:3, quantile, probs = 0.95))
+  post_quant <- reshape2::melt(apply(post_draw, 1:3, quantile, probs = 0.95))
   post_mean$upp <- post_quant$value
   
   

@@ -1,8 +1,15 @@
 useDynLib(lddmm, .registration=TRUE)
 importFrom(Rcpp, evalCpp)
-importFrom("stats", "dgamma", "rnorm", "runif", "sd", "setNames", "quantile")
+importFrom("stats", "dgamma", "rnorm", "runif", "sd", "setNames", 
+           "quantile")
 importFrom("utils", "data", "setTxtProgressBar", "txtProgressBar")
 importFrom('dplyr', '%>%')
+importFrom('tidyr', 'pivot_wider')
+importFrom('ggplot2', 'ggplot', 'geom_line', 'aes', 'facet_wrap', 'labs', 
+           'scale_color_brewer', 'theme', 'element_text', 
+           'scale_x_continuous', 'geom_point', 'geom_ribbon', 
+           'scale_fill_brewer')
+importFrom("latex2exp", "TeX")
 export("B_basis", "data",
        "extract_post_draws", "extract_post_mean", "H_ball",
        "LDDMM", "log_likelihood", "P_smooth1", "plot_accuracy", 
