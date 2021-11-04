@@ -82,9 +82,9 @@ hypers <- NULL
 hypers$s_sigma_mu <- hypers$s_sigma_b <- 0.1
 
 # Change the number of iterations when running the model
-# Here the number is small so that the code can run in less than 5 minutes
-Niter <- 250
-burnin <- 150
+# Here the number is small so that the code can run in less than 1 minute
+Niter <- 25
+burnin <- 15
 thin <- 1
 samp_size <- (Niter - burnin) / thin
 
