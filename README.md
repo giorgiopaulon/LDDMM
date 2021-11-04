@@ -72,7 +72,7 @@ cols <- brewer.pal(9, "Set1")
 
 # Load the data
 data('data')
-  
+
 # Descriptive plots
 plot_accuracy(data)
 plot_RT(data)

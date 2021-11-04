@@ -1,13 +1,14 @@
 Package: lddmm
 Type: Package
 Title: Longitudinal Drift-Diffusion Mixed Models (LDDMM)
-Version: 0.1
+Version: 0.1.0
 Date: 2021-11-02
 Authors@R: c(person("Giorgio", "Paulon", email = "giorgio.paulon@utexas.edu",
                     role = c("aut", "cre")), 
              person("Abhra", "Sarkar", email = "abhra.sarkar@utexas.edu",
                     role = c("aut", "ctb")))
-Description: Code implementing the DDM model as described in Paulon et al. (2021).
+Description: This package implements the drift-diffusion mixed model for category learning as described in Paulon et al. (2021).
+Depends: R (>= 3.5.0)
 License: MIT + file LICENSE
 Encoding: UTF-8
 Imports: Rcpp (>= 1.0.6), RcppArmadillo, RcppProgress, rgen, gtools, LaplacesDemon, dplyr, plyr, tidyr, ggplot2, latex2exp, reshape2, RColorBrewer

@@ -12,7 +12,7 @@
 #' * `r_time`: vector of size n containing the response times
 #' * `cens`: vector of size n containing the censoring indicators (1 censored, 0 non censored)
 #'
-#' @format A data frame with n rows and 6 variables
+#' @format A data frame with 24,254 rows and 6 columns
 #'
 "data"
 

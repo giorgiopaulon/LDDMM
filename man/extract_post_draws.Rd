@@ -22,7 +22,7 @@ extract_post_draws(data, fit, par = c("drift", "boundary"))
 \item{par}{parameter to output ('drift', or 'boundary')}
 }
 \value{
-matrix with the following columns:
+Matrix with the following columns:
 \itemize{
 \item subject: participant labels
 \item block: training blocks

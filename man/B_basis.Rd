@@ -12,7 +12,7 @@ B_basis(xgrid, knots)
 \item{knots}{vector of knots for the splines (vector of length K)}
 }
 \value{
-n x (K+1) - matrix representing the value of each basis function
+n x (K+1) - matrix representing the value of each basis function evaluated on xgrid
 }
 \description{
 Construct the J basis functions for the splines evaluated on a grid.

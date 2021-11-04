@@ -18,7 +18,7 @@ plot_RT(data)
 }}
 }
 \value{
-population level raw response times
+Population level raw response times
 }
 \description{
 Plot the mean response times of the raw data.

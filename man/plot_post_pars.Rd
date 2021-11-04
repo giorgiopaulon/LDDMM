@@ -22,7 +22,7 @@ plot_post_pars(data, fit, par = c("drift", "boundary"))
 \item{par}{parameter to output ('drift', or 'boundary')}
 }
 \value{
-posterior mean and 95\% CI
+Posterior mean and 95\% CI
 }
 \description{
 Function to plot the posterior mean and credible intervals of the parameters of interest from a lddmm fit object.

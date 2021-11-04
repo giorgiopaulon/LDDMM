@@ -5,7 +5,7 @@
 \alias{data}
 \title{Example dataset}
 \format{
-A data frame with n rows and 6 variables
+A data frame with 24,254 rows and 6 columns
 }
 \usage{
 data

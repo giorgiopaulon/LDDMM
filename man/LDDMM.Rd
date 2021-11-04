@@ -4,7 +4,14 @@
 \alias{LDDMM}
 \title{Drift Diffusion Model Fit}
 \usage{
-LDDMM(data, hypers, fix_pars = NULL, Niter = 5000, burnin = 2000, thin = 5)
+LDDMM(
+  data,
+  hypers,
+  fix_boundary = FALSE,
+  Niter = 5000,
+  burnin = 2000,
+  thin = 5
+)
 }
 \arguments{
 \item{data}{dataframe with the following columns:
@@ -17,9 +24,10 @@ LDDMM(data, hypers, fix_pars = NULL, Niter = 5000, burnin = 2000, thin = 5)
 \item cens: vector of size n containing the censoring indicators (1 censored, 0 non censored)
 }}
 
-\item{hypers}{hyperparameters of the MCMC}
+\item{hypers}{hyperparameters of the MCMC: list containing "s_sigma_mu" and "s_sigma_b",
+which are the smoothness parameters for drifts and boundaries, respectively)}
 
-\item{fix_pars}{which parameters should be fixed: 'drift', 'boundary' or leave blank (default) for full model}
+\item{fix_boundary}{whether to fix the boundary parameters to a single scalar or not}
 
 \item{Niter}{total number of iterations}
 
@@ -28,7 +36,7 @@ LDDMM(data, hypers, fix_pars = NULL, Niter = 5000, burnin = 2000, thin = 5)
 \item{thin}{thinning factor}
 }
 \value{
-list with the following MCMC posterior samples:
+List with the following MCMC posterior samples:
 \itemize{
 \item post_mean_delta: posterior samples for the population offset parameters
 \item post_mean_mu: posterior samples for the population drift parameters

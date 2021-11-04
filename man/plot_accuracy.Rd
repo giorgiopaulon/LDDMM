@@ -18,7 +18,7 @@ plot_accuracy(data)
 }}
 }
 \value{
-individual and population level raw accuracies
+Individual and population level raw accuracies
 }
 \description{
 Plot the accuracy of the raw data.
