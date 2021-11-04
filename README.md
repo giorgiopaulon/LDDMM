@@ -91,7 +91,7 @@ samp_size <- (Niter - burnin) / thin
 set.seed(123)
 fit <- LDDMM(data = data, 
              hypers = hypers, 
-             fix_pars = NULL, 
+             fix_boundary = FALSE, 
              Niter = Niter, 
              burnin = burnin, 
              thin = thin)
@@ -103,7 +103,8 @@ plot_post_pars(data, fit, par = 'boundary')
 
 To extract relevant posterior draws or posterior summaries instead of
 simply plotting them, one can use the functions `extract_post_mean` or
-`extract_post_draws`.
+`extract_post_draws`. An auxiliary function that fixes the boundary
+parameters can be called with the option `fix_boundary = TRUE`.
 
 ### Questions or bugs
 
