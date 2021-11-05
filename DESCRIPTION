@@ -17,3 +17,7 @@ LazyData: true
 LinkingTo: Rcpp, RcppArmadillo, RcppProgress, rgen
 RoxygenNote: 7.1.2
 Roxygen: list(markdown = TRUE)
+Suggests: 
+    rmarkdown,
+    knitr
+VignetteBuilder: knitr

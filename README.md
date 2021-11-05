@@ -62,7 +62,8 @@ The following is a minimal example of a simple model fit.
 ``` r
 # Load libraries
 library(RColorBrewer)
-library(tidyverse)
+library(ggplot2)
+library(dplyr)
 library(reshape2)
 library(latex2exp)
 library(lddmm)
