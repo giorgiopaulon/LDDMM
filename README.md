@@ -53,7 +53,7 @@ install_github('giorgiopaulon/lddmm')
 
 If you are using a Windows machine, you might have to also install and
 configure `Rtools` using the following
-[instructions](https://cran.rstudio.com/bin/windows/Rtools/).
+[instructions](https://CRAN.R-project.org/bin/windows/Rtools/).
 
 ### Usage
 
