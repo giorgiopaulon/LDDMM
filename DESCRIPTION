@@ -8,7 +8,7 @@ Authors@R: c(person("Giorgio", "Paulon", email = "giorgio.paulon@utexas.edu",
              person("Abhra", "Sarkar", email = "abhra.sarkar@utexas.edu",
                     role = c("aut", "ctb")))
 Description: Implementation of the drift-diffusion mixed model for category learning as described in Paulon et al. (2021) <doi:10.1080/01621459.2020.1801448>.
-Depends: R (>= 3.5.0)
+Depends: R (>= 4.1.0)
 Language: en-US
 License: MIT + file LICENSE
 Encoding: UTF-8
