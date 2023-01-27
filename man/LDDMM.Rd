@@ -7,7 +7,7 @@
 LDDMM(
   data,
   hypers,
-  fix_boundary = FALSE,
+  boundaries = "flexible",
   Niter = 5000,
   burnin = 2000,
   thin = 5
@@ -20,14 +20,16 @@ LDDMM(
 \item block: vector of size n containing the training blocks (longitudinal units)
 \item s: vector of size n containing the stimuli
 \item d: vector of size n containing the decisions
-\item r_time: vector of size n containing the response times
+\item r_time: vector of size n containing the log transformed of the response times (in milliseconds)
 \item cens: vector of size n containing the censoring indicators (1 censored, 0 non censored)
 }}
 
 \item{hypers}{hyperparameters of the MCMC: list containing "s_sigma_mu" and "s_sigma_b",
 which are the smoothness parameters for drifts and boundaries, respectively)}
 
-\item{fix_boundary}{whether to fix the boundary parameters to a single scalar or not}
+\item{boundaries}{whether to fit the unrestricted model (flexible), assume constant
+boundaries over time (constant) or fix the boundaries to the same level
+across predictors (fixed)}
 
 \item{Niter}{total number of iterations}
 

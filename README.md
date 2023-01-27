@@ -2,7 +2,7 @@
 # LDDMM
 
 An R package for Longitudinal Drift-Diffusion Mixed Models (LDDMM),
-v0.1.
+v0.2.0.
 
 **Authors**: [Giorgio Paulon](https://giorgiopaulon.github.io/), [Abhra
 Sarkar](https://abhrastat.github.io/)
@@ -58,6 +58,7 @@ configure `Rtools` using the following
 ### Usage
 
 The following is a minimal example of a simple model fit.
+For numerical stability, the response times should be provided as the log transform of time (in milliseconds) so that, for most applications, typical values lie in $[0, 10]$. 
 
 ``` r
 # Load libraries
@@ -92,7 +93,6 @@ samp_size <- (Niter - burnin) / thin
 set.seed(123)
 fit <- LDDMM(data = data, 
              hypers = hypers, 
-             fix_boundary = FALSE, 
              Niter = Niter, 
              burnin = burnin, 
              thin = thin)
@@ -104,8 +104,12 @@ plot_post_pars(data, fit, par = 'boundary')
 
 To extract relevant posterior draws or posterior summaries instead of
 simply plotting them, one can use the functions `extract_post_mean` or
-`extract_post_draws`. An auxiliary function that fixes the boundary
-parameters can be called with the option `fix_boundary = TRUE`.
+`extract_post_draws`. Auxiliary functions that assume constant boundary 
+parameters over time or fix the boundaries to the same level across predictors 
+can be called with the options `boundaries = "constant"` and 
+`boundaries = "fixed"`, respectively.
+
+
 
 ### Questions or bugs
 

@@ -5,7 +5,7 @@ require(mvtnorm)
 require(gtools)
 require(ggplot2)
 require(latex2exp)
-library(RColorBrewer)
+require(RColorBrewer)
 require(LaplacesDemon)
 require(plyr)
 
@@ -21,7 +21,7 @@ require(plyr)
 #' * block: vector of size n containing the training blocks (longitudinal units)
 #' * s: vector of size n containing the stimuli
 #' * d: vector of size n containing the decisions
-#' * r_time: vector of size n containing the response times
+#' * r_time: vector of size n containing the log transformed of the response times (in milliseconds)
 #' * cens: vector of size n containing the censoring indicators (1 censored, 0 non censored)
 #' @return Individual and population level raw accuracies
 plot_accuracy <- function(data){
@@ -69,7 +69,7 @@ plot_accuracy <- function(data){
 #' * block: vector of size n containing the training blocks (longitudinal units)
 #' * s: vector of size n containing the stimuli
 #' * d: vector of size n containing the decisions
-#' * r_time: vector of size n containing the response times
+#' * r_time: vector of size n containing the log transformed of the response times (in milliseconds)
 #' * cens: vector of size n containing the censoring indicators (1 censored, 0 non censored)
 #' @return Population level raw response times
 plot_RT <- function(data){
@@ -294,11 +294,13 @@ sample_smooth_var <- function(sigma2_ua_old, sigma2_us_old,
 #' * block: vector of size n containing the training blocks (longitudinal units)
 #' * s: vector of size n containing the stimuli
 #' * d: vector of size n containing the decisions
-#' * r_time: vector of size n containing the response times
+#' * r_time: vector of size n containing the log transformed of the response times (in milliseconds)
 #' * cens: vector of size n containing the censoring indicators (1 censored, 0 non censored)
 #' @param hypers hyperparameters of the MCMC: list containing "s_sigma_mu" and "s_sigma_b", 
 #'               which are the smoothness parameters for drifts and boundaries, respectively)
-#' @param fix_boundary whether to fix the boundary parameters to a single scalar or not
+#' @param boundaries whether to fit the unrestricted model (flexible), assume constant 
+#'                   boundaries over time (constant) or fix the boundaries to the same level 
+#'                   across predictors (fixed)
 #' @param Niter total number of iterations
 #' @param burnin burnin of the chain
 #' @param thin thinning factor
@@ -319,7 +321,7 @@ sample_smooth_var <- function(sigma2_ua_old, sigma2_us_old,
 #' * pred_time: predicted population-level response times
 #' * pred_ans_ind: predicted individual-level categories
 #' * pred_time_ind: predicted individual-level response times
-LDDMM <- function(data, hypers, fix_boundary = FALSE, 
+LDDMM <- function(data, hypers, boundaries = 'flexible', 
                   Niter = 5000, burnin = 2000, thin = 5){
   
   # Check for data issues
@@ -337,11 +339,17 @@ LDDMM <- function(data, hypers, fix_boundary = FALSE,
   }
   
   # Call one of the main functions
-  if (!fix_boundary){
+  if (boundaries == 'flexible'){
     fit <- LDDMM_full(data, hypers, Niter, burnin, thin)
   }
-  else {
+  else if (boundaries == 'constant') {
+    fit <- LDDMM_fix_bound(data, hypers, Niter, burnin, thin)
+  }
+  else if (boundaries == 'fixed') {
     fit <- LDDMM_fix_all_bound(data, hypers, Niter, burnin, thin)
+  }
+  else {
+    stop("The argument boundaries can be only one of the following: flexible, constant, or fixed")
   }
   
   return (fit)
@@ -1550,29 +1558,7 @@ LDDMM_fix_bound <- function(data, hypers, Niter = 5000, burnin = 2000, thin = 5)
       }
     }
     
-    # 2(a) Update the single scalar boundary parameter
-    # b_prop <- rnorm(1, b_old, sd_MH_beta_b)
-    # 
-    # # Modify the proposed values in the corresponding positions
-    # B_beta_b_prop_dat <- matrix(b_prop, n, d_j[1])
-    # 
-    # # This is the proposed value for b
-    # b_prop_dat <- exp(B_beta_b_prop_dat)
-    # 
-    # logpost_prop <- log_likelihood(tau, mu_dat, 
-    #                                b_prop_dat, delta_dat, 
-    #                                cens, D, TRUE)
-    # logpost_old <- log_likelihood(tau, mu_dat, 
-    #                               b_dat, delta_dat, 
-    #                               cens, D, TRUE)
-    # 
-    # alpha_acc <- min(0, logpost_prop - logpost_old)
-    # l_u <- log(runif(1))
-    # 
-    # if (l_u < alpha_acc){
-    #   b_old <- b_prop
-    #   b_dat <- b_prop_dat
-    # }
+    # 2(a) Update the constant boundary parameters
     for (d1 in 1:d_j[1]){
       idx_i <- which( (D[,1] == d1) )
       tau_temp <- tau[idx_i]
@@ -2700,7 +2686,7 @@ LDDMM_fix_all_bound <- function(data, hypers, Niter = 5000, burnin = 2000, thin 
 #' * block: vector of size n containing the training blocks (longitudinal units)
 #' * s: vector of size n containing the stimuli
 #' * d: vector of size n containing the decisions
-#' * r_time: vector of size n containing the response times
+#' * r_time: vector of size n containing the log transformed of the response times (in milliseconds)
 #' * cens: vector of size n containing the censoring indicators (1 censored, 0 non censored)
 #' @param fit fit from the lddmm function
 #' @param par parameter to output ('drift', or 'boundary')
@@ -2744,7 +2730,7 @@ extract_post_mean = function(data, fit, par = c('drift', 'boundary')){
 #' * block: vector of size n containing the training blocks (longitudinal units)
 #' * s: vector of size n containing the stimuli
 #' * d: vector of size n containing the decisions
-#' * r_time: vector of size n containing the response times
+#' * r_time: vector of size n containing the log transformed of the response times (in milliseconds)
 #' * cens: vector of size n containing the censoring indicators (1 censored, 0 non censored)
 #' @param fit fit from the lddmm function
 #' @param par parameter to output ('drift', or 'boundary')
@@ -2790,7 +2776,7 @@ extract_post_draws = function(data, fit, par = c('drift', 'boundary')){
 #' * block: vector of size n containing the training blocks (longitudinal units)
 #' * s: vector of size n containing the stimuli
 #' * d: vector of size n containing the decisions
-#' * r_time: vector of size n containing the response times
+#' * r_time: vector of size n containing the log transformed of the response times (in milliseconds)
 #' * cens: vector of size n containing the censoring indicators (1 censored, 0 non censored)
 #' @param fit fit from the lddmm function
 #' @param par parameter to output ('drift', or 'boundary')
