@@ -20,7 +20,9 @@ LDDMM(
 \item block: vector of size n containing the training blocks (longitudinal units)
 \item s: vector of size n containing the stimuli
 \item d: vector of size n containing the decisions
-\item r_time: vector of size n containing the log transformed of the response times (in milliseconds)
+\item r_time: vector of size n containing the response times. To avoid numerical
+issues, the unit of measurement should be such that the numerical
+values of most response times should lie between 0 and 10
 \item cens: vector of size n containing the censoring indicators (1 censored, 0 non censored)
 }}
 
@@ -59,5 +61,8 @@ List with the following MCMC posterior samples:
 }
 }
 \description{
-Main function for the Gibbs sampler for the drift-diffusion model.
+Main function for the Gibbs sampler for the drift-diffusion model. Note that
+priors are noninformative and calibrated so that, for the most stable
+performance, the response times (variable \code{r_time} in the \code{data} dataframe)
+should lie between 0 and 10.
 }

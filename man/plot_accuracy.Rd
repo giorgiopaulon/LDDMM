@@ -13,7 +13,7 @@ plot_accuracy(data)
 \item block: vector of size n containing the training blocks (longitudinal units)
 \item s: vector of size n containing the stimuli
 \item d: vector of size n containing the decisions
-\item r_time: vector of size n containing the log transformed of the response times (in milliseconds)
+\item r_time: vector of size n containing the response times
 \item cens: vector of size n containing the censoring indicators (1 censored, 0 non censored)
 }}
 }

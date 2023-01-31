@@ -20,7 +20,7 @@ has two possible response categories.
 \item \code{block}: vector of size n containing the training blocks (longitudinal units)
 \item \code{s}: vector of size n containing the stimuli
 \item \code{d}: vector of size n containing the decisions
-\item \code{r_time}: vector of size n containing the response times
+\item \code{r_time}: vector of size n containing the response times (log transformed)
 \item \code{cens}: vector of size n containing the censoring indicators (1 censored, 0 non censored)
 }
 }

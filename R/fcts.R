@@ -21,7 +21,7 @@ require(plyr)
 #' * block: vector of size n containing the training blocks (longitudinal units)
 #' * s: vector of size n containing the stimuli
 #' * d: vector of size n containing the decisions
-#' * r_time: vector of size n containing the log transformed of the response times (in milliseconds)
+#' * r_time: vector of size n containing the response times
 #' * cens: vector of size n containing the censoring indicators (1 censored, 0 non censored)
 #' @return Individual and population level raw accuracies
 plot_accuracy <- function(data){
@@ -69,7 +69,7 @@ plot_accuracy <- function(data){
 #' * block: vector of size n containing the training blocks (longitudinal units)
 #' * s: vector of size n containing the stimuli
 #' * d: vector of size n containing the decisions
-#' * r_time: vector of size n containing the log transformed of the response times (in milliseconds)
+#' * r_time: vector of size n containing the response times
 #' * cens: vector of size n containing the censoring indicators (1 censored, 0 non censored)
 #' @return Population level raw response times
 plot_RT <- function(data){
@@ -287,14 +287,19 @@ sample_smooth_var <- function(sigma2_ua_old, sigma2_us_old,
 
 #' Drift Diffusion Model Fit
 #'
-#' Main function for the Gibbs sampler for the drift-diffusion model.
+#' Main function for the Gibbs sampler for the drift-diffusion model. Note that 
+#' priors are noninformative and calibrated so that, for the most stable 
+#' performance, the response times (variable `r_time` in the `data` dataframe) 
+#' should lie between 0 and 10.
 #'
 #' @param data dataframe with the following columns:
 #' * subject: vector of size n containing the participant labels
 #' * block: vector of size n containing the training blocks (longitudinal units)
 #' * s: vector of size n containing the stimuli
 #' * d: vector of size n containing the decisions
-#' * r_time: vector of size n containing the log transformed of the response times (in milliseconds)
+#' * r_time: vector of size n containing the response times. To avoid numerical 
+#'           issues, the unit of measurement should be such that the numerical 
+#'           values of most response times should lie between 0 and 10
 #' * cens: vector of size n containing the censoring indicators (1 censored, 0 non censored)
 #' @param hypers hyperparameters of the MCMC: list containing "s_sigma_mu" and "s_sigma_b", 
 #'               which are the smoothness parameters for drifts and boundaries, respectively)
@@ -2686,7 +2691,7 @@ LDDMM_fix_all_bound <- function(data, hypers, Niter = 5000, burnin = 2000, thin 
 #' * block: vector of size n containing the training blocks (longitudinal units)
 #' * s: vector of size n containing the stimuli
 #' * d: vector of size n containing the decisions
-#' * r_time: vector of size n containing the log transformed of the response times (in milliseconds)
+#' * r_time: vector of size n containing the response times
 #' * cens: vector of size n containing the censoring indicators (1 censored, 0 non censored)
 #' @param fit fit from the lddmm function
 #' @param par parameter to output ('drift', or 'boundary')
@@ -2730,7 +2735,7 @@ extract_post_mean = function(data, fit, par = c('drift', 'boundary')){
 #' * block: vector of size n containing the training blocks (longitudinal units)
 #' * s: vector of size n containing the stimuli
 #' * d: vector of size n containing the decisions
-#' * r_time: vector of size n containing the log transformed of the response times (in milliseconds)
+#' * r_time: vector of size n containing the response times
 #' * cens: vector of size n containing the censoring indicators (1 censored, 0 non censored)
 #' @param fit fit from the lddmm function
 #' @param par parameter to output ('drift', or 'boundary')
@@ -2776,7 +2781,7 @@ extract_post_draws = function(data, fit, par = c('drift', 'boundary')){
 #' * block: vector of size n containing the training blocks (longitudinal units)
 #' * s: vector of size n containing the stimuli
 #' * d: vector of size n containing the decisions
-#' * r_time: vector of size n containing the log transformed of the response times (in milliseconds)
+#' * r_time: vector of size n containing the response times
 #' * cens: vector of size n containing the censoring indicators (1 censored, 0 non censored)
 #' @param fit fit from the lddmm function
 #' @param par parameter to output ('drift', or 'boundary')

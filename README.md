@@ -2,7 +2,7 @@
 # LDDMM
 
 An R package for Longitudinal Drift-Diffusion Mixed Models (LDDMM),
-v0.2.0.
+v0.2.1.
 
 **Authors**: [Giorgio Paulon](https://giorgiopaulon.github.io/), [Abhra
 Sarkar](https://abhrastat.github.io/)
@@ -57,8 +57,9 @@ configure `Rtools` using the following
 
 ### Usage
 
-The following is a minimal example of a simple model fit.
-For numerical stability, the response times should be provided as the log transform of time (in milliseconds) so that, for most applications, typical values lie in $[0, 10]$. 
+The following is a minimal example of a simple model fit. 
+For numerical stability, the unit of measurement should be such that the numerical values of most response times should lie in $[0, 10]$.
+
 
 ``` r
 # Load libraries

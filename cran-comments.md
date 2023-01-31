@@ -1,7 +1,7 @@
 ## R CMD check results
 
-── R CMD check results ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── lddmm 0.2.0 ────
-Duration: 1m 15s
+── R CMD check results ────────────────────── lddmm 0.2.1 ────
+Duration: 1m 17.2s
 
 ❯ checking top-level files ... NOTE
   Non-standard files/directories found at top level:
@@ -9,7 +9,7 @@ Duration: 1m 15s
 
 ❯ checking dependencies in R code ... NOTE
   Namespaces in Imports field not imported from:
-    ‘RColorBrewer’ ‘RcppProgress’ ‘rgen’ ‘vctrs’
+    ‘RColorBrewer’ ‘RcppProgress’ ‘rgen’
     All declared Imports should be used.
 
 0 errors ✔ | 0 warnings ✔ | 2 notes ✖

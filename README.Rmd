@@ -15,7 +15,7 @@ knitr::opts_chunk$set(
 
 # LDDMM
 
-An R package for Longitudinal Drift-Diffusion Mixed Models (LDDMM), v0.2.0.
+An R package for Longitudinal Drift-Diffusion Mixed Models (LDDMM), v0.2.1.
 
 **Authors**: [Giorgio Paulon](https://giorgiopaulon.github.io/), [Abhra Sarkar](https://abhrastat.github.io/)
 
@@ -47,7 +47,9 @@ If you are using a Windows machine, you might have to also install and configure
 ### Usage
 
 The following is a minimal example of a simple model fit. 
-For numerical stability, the response times should be provided as the log transform of time (in milliseconds) so that, for most applications, typical values lie in $[0, 10]$. 
+For numerical stability, the unit of measurement should be such that the numerical values of most response times should lie in $[0, 10]$.
+
+
 
 ```{r, eval = TRUE, results = 'hide', fig.show = 'hide', warning = FALSE, message = FALSE}
 # Load libraries
