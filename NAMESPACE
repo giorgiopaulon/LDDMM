@@ -3,7 +3,7 @@
 importFrom(Rcpp,sourceCpp)
 useDynLib(lddmm, .registration = TRUE)
 importFrom("stats", "dgamma", "rnorm", "runif", "sd", "setNames", 
-           "quantile")
+           "quantile", "var")
 importFrom("utils", "data", "setTxtProgressBar", "txtProgressBar")
 importFrom('dplyr', '%>%')
 importFrom('tidyr', 'pivot_wider')
