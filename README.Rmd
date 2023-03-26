@@ -15,7 +15,7 @@ knitr::opts_chunk$set(
 
 # LDDMM
 
-An R package for Longitudinal Drift-Diffusion Mixed Models (LDDMM), v0.2.1.
+An R package for Longitudinal Drift-Diffusion Mixed Models (LDDMM), v0.3.
 
 **Authors**: [Giorgio Paulon](https://giorgiopaulon.github.io/), [Abhra Sarkar](https://abhrastat.github.io/)
 
@@ -91,11 +91,14 @@ fit <- LDDMM(data = data,
 # Plot the results
 plot_post_pars(data, fit, par = 'drift')
 plot_post_pars(data, fit, par = 'boundary')
+
+# Compute the WAIC to compare models
+compute_WAIC(fit)
 ```
 
 
 To extract relevant posterior draws or posterior summaries instead of simply plotting them, one can use the functions `extract_post_mean` or `extract_post_draws`. 
-Auxiliary functions that assume constant boundary parameters over time or fix the boundaries to the same level across predictors can be called with the options `boundaries = "constant"` and `boundaries = "fixed"`, respectively.
+Auxiliary functions that assume constant boundary parameters over time ($b_{d,s}^{(i)}(t) = b_{d,s}$ using the article notation) or fix the boundaries to the same level across input predictors ($b_{d,s}^{(i)}(t) = b_{d}$ using the article notation) can be called with the options `boundaries = "constant"` and `boundaries = "fixed"`, respectively.
 
 
 ### Questions or bugs

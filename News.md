@@ -1,4 +1,11 @@
 
+# LDDMM 0.3.0
+
+## Major changes
+
+* Now the option for constant boundaries over time (`boundaries = "constant"`) includes same boundaries per each input tone, and varies across possible decisions
+* Added a function to calculate the Watanabe-Akaike information criterion to compare model performance
+
 # LDDMM 0.2.1
 
 
