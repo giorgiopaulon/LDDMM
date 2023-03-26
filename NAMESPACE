@@ -14,5 +14,5 @@ importFrom('ggplot2', 'ggplot', 'geom_line', 'aes', 'facet_wrap', 'labs',
 importFrom("latex2exp", "TeX")
 export("B_basis", "data",
        "extract_post_draws", "extract_post_mean", "H_ball",
-       "LDDMM", "log_likelihood", "P_smooth1", "plot_accuracy", 
-       "plot_post_pars", "plot_RT")
+       "LDDMM", "log_likelihood", "log_likelihood_ind", "P_smooth1", "plot_accuracy", 
+       "plot_post_pars", "plot_RT", "compute_WAIC")
