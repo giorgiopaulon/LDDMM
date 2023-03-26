@@ -8,7 +8,6 @@
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::depends(RcppProgress)]]
 // [[Rcpp::depends(rgen)]]
-// [[Rcpp::plugins(cpp11)]]
 
 
 arma::vec dinvgaussian_ind(arma::vec tau, arma::vec mu, arma::vec lambda, 

@@ -11,6 +11,22 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
+// log_likelihood_ind
+arma::vec log_likelihood_ind(arma::vec tau, arma::mat mu, arma::mat b, arma::vec delta, arma::uvec cens, arma::umat D);
+RcppExport SEXP _lddmm_log_likelihood_ind(SEXP tauSEXP, SEXP muSEXP, SEXP bSEXP, SEXP deltaSEXP, SEXP censSEXP, SEXP DSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec >::type tau(tauSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type b(bSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type delta(deltaSEXP);
+    Rcpp::traits::input_parameter< arma::uvec >::type cens(censSEXP);
+    Rcpp::traits::input_parameter< arma::umat >::type D(DSEXP);
+    rcpp_result_gen = Rcpp::wrap(log_likelihood_ind(tau, mu, b, delta, cens, D));
+    return rcpp_result_gen;
+END_RCPP
+}
 // log_likelihood
 double log_likelihood(arma::vec tau, arma::mat mu, arma::mat b, arma::vec delta, arma::uvec cens, arma::umat D, bool log);
 RcppExport SEXP _lddmm_log_likelihood(SEXP tauSEXP, SEXP muSEXP, SEXP bSEXP, SEXP deltaSEXP, SEXP censSEXP, SEXP DSEXP, SEXP logSEXP) {
@@ -139,6 +155,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_lddmm_log_likelihood_ind", (DL_FUNC) &_lddmm_log_likelihood_ind, 6},
     {"_lddmm_log_likelihood", (DL_FUNC) &_lddmm_log_likelihood, 7},
     {"_lddmm_table_int", (DL_FUNC) &_lddmm_table_int, 2},
     {"_lddmm_sum_rows_log", (DL_FUNC) &_lddmm_sum_rows_log, 1},
