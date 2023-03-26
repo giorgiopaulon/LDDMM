@@ -11,6 +11,115 @@
 // [[Rcpp::plugins(cpp11)]]
 
 
+arma::vec dinvgaussian_ind(arma::vec tau, arma::vec mu, arma::vec lambda, 
+                           arma::vec delta, bool log){
+  
+  unsigned int n = tau.n_elem;
+  arma::vec out(n, arma::fill::zeros); 
+  
+  out = 0.5 * (arma::log(lambda) - std::log(2.0 * arma::datum::pi)) - 
+    3.0/2.0 * arma::log(tau - delta) - 
+    lambda % arma::square(tau - delta - mu) / (2.0 * arma::square(mu) % (tau - delta));
+  
+  return(out); 
+}
+
+
+arma::vec pinvgaussian_ind(arma::vec tau, arma::vec mu, arma::vec lambda, 
+                           arma::vec delta, bool log){
+  
+  unsigned int n = tau.n_elem;
+  arma::vec out(n, arma::fill::zeros); 
+  
+  out = arma::log(arma::abs(
+    1.0 - 
+      arma::normcdf(  arma::sqrt(lambda / (tau - delta)) % ((tau - delta) / mu - 1.0) ) - 
+      arma::exp( 2.0 * lambda / mu +   
+      arma::log(arma::normcdf( - arma::sqrt(lambda / (tau - delta)) % ((tau - delta) / mu + 1.0) )))
+  ));
+  
+  return(out); 
+}
+
+
+//' Log-likelihood computation for a single observation
+//' 
+//' Compute the log-likelihood for the drift-diffusion model, including the
+//' censored data contribution, for a single observation.
+//'
+//' @param tau vector of size n containing the response times
+//' @param mu matrix of size (n x d1) containing the drift parameters 
+//' corresponding to the n response times for each possible d1 decision
+//' @param b matrix of size (n x d1) containing the boundary parameters 
+//' corresponding to the n response times for each possible d1 decision
+//' @param delta vector of size n containing the offset parameters corresponding
+//' to the n response times
+//' @param cens vector of size n containing censoring indicators (1 censored, 0
+//' not censored) corresponding to the n response times
+//' @param D (n x 2) matrix whose first column has the n input stimuli, and whose second column has the n decision categories
+// [[Rcpp::export]]
+arma::vec log_likelihood_ind(arma::vec tau, arma::mat mu, arma::mat b, 
+                             arma::vec delta, arma::uvec cens, arma::umat D){
+  
+  unsigned int n = tau.n_elem;
+  unsigned int d_1 = mu.n_cols;
+  arma::uvec one_to_d = arma::regspace<arma::uvec>(0, d_1 - 1);
+  arma::uvec idx_cens = arma::find(cens == 1);
+  arma::uvec idx_noncens = arma::find(cens == 0);
+  arma::uvec idx_nsupp = arma::find(tau <= delta);
+  arma::uvec yprime;
+  arma::uvec idx_succ;
+  
+  arma::mat out(n, d_1*(d_1 + 1), arma::fill::zeros);
+  // out -= arma::datum::inf;
+  unsigned int pos = 0;
+  
+  // Computation is done on the log scale to prevent underflow/overflow
+  if (idx_nsupp.n_elem == 0){
+    
+    for (unsigned int y_temp = 0; y_temp < d_1; y_temp++){
+      idx_succ = arma::find( (D.col(1) == (y_temp + 1)) && (cens == 0) );
+      
+      if (idx_succ.n_elem > 0){
+        out.submat(idx_succ, arma::regspace<arma::uvec>(pos, pos)) = 
+          dinvgaussian_ind(tau.elem(idx_succ), b.submat(idx_succ, arma::regspace<arma::uvec>(y_temp, y_temp))/mu.submat(idx_succ, arma::regspace<arma::uvec>(y_temp, y_temp)), 
+                           arma::square(b.submat(idx_succ, arma::regspace<arma::uvec>(y_temp, y_temp))), delta.elem(idx_succ), true);
+      }
+      
+      pos += 1;
+      yprime = one_to_d.elem(arma::find(one_to_d != y_temp));
+      
+      for (unsigned int j = 0; j < d_1 - 1; j++){
+        if (idx_succ.n_elem > 0){
+          out.submat(idx_succ, arma::regspace<arma::uvec>(pos, pos)) = 
+            pinvgaussian_ind(tau.elem(idx_succ), b.submat(idx_succ, arma::regspace<arma::uvec>(yprime(j), yprime(j)))/mu.submat(idx_succ, arma::regspace<arma::uvec>(yprime(j), yprime(j))), 
+                             arma::square(b.submat(idx_succ, arma::regspace<arma::uvec>(yprime(j), yprime(j)))), delta.elem(idx_succ), true);
+        }
+        
+        pos += 1;
+      }
+    }
+    if (idx_cens.n_elem > 0){
+      for (unsigned int y_temp = 0; y_temp < d_1; y_temp++){
+        out.submat(idx_cens, arma::regspace<arma::uvec>(pos, pos)) = 
+          pinvgaussian_ind(tau.elem(idx_cens), b.submat(idx_cens, arma::regspace<arma::uvec>(y_temp, y_temp))/mu.submat(idx_cens, arma::regspace<arma::uvec>(y_temp, y_temp)),
+                           arma::square(b.submat(idx_cens, arma::regspace<arma::uvec>(y_temp, y_temp))), delta.elem(idx_cens), true);;
+        
+        pos += 1;
+      }
+    }
+  }
+  
+  if (out.has_nan()){
+    out.zeros();
+    out -= arma::datum::inf;
+  }
+  
+  return (arma::sum(out, 1));
+  
+} 
+
+
 double dinvgaussian_cpp(arma::vec tau, arma::vec mu, arma::vec lambda, 
                         arma::vec delta, bool log){
   

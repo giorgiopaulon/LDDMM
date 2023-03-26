@@ -348,10 +348,10 @@ LDDMM <- function(data, hypers, boundaries = 'flexible',
     fit <- LDDMM_full(data, hypers, Niter, burnin, thin)
   }
   else if (boundaries == 'constant') {
-    fit <- LDDMM_fix_bound(data, hypers, Niter, burnin, thin)
+    fit <- LDDMM_const_bound(data, hypers, Niter, burnin, thin)
   }
   else if (boundaries == 'fixed') {
-    fit <- LDDMM_fix_all_bound(data, hypers, Niter, burnin, thin)
+    fit <- LDDMM_fix_bound(data, hypers, Niter, burnin, thin)
   }
   else {
     stop("The argument boundaries can be only one of the following: flexible, constant, or fixed")
@@ -433,7 +433,7 @@ LDDMM_full <- function(data, hypers, Niter = 5000, burnin = 2000, thin = 5){
   pred_ans <- array(NA, dim = c(T_max, d_j[1], samp_size))
   pred_time_ind <- array(NA, dim = c(n_ind, T_max, d_j[1], samp_size))
   pred_ans_ind <- array(NA, dim = c(n_ind, T_max, d_j[1], samp_size))
-  # loglik_chain <- array(NA, dim = c(samp_size, n))
+  loglik_chain <- array(NA, dim = c(samp_size, n))
   
   # Set initial values
   delta_old <- array(NA, dim = c(d_j[1], n_ind))
@@ -1157,37 +1157,38 @@ LDDMM_full <- function(data, hypers, Niter = 5000, burnin = 2000, thin = 5){
       sigma2_b_ua[it] <- sigma2_b_ua_old
       sigma2_1_mu[it] <- sigma2_1_mu_old
       sigma2_1_b[it] <- sigma2_1_b_old
-      # loglik_chain[it,] <- log_likelihood_ind(tau, mu_dat, b_dat, delta_dat, cens, D)
-      z[,,it] <- z_temp		
+      loglik_chain[it,] <- log_likelihood_ind(tau, mu_dat, b_dat, delta_dat, cens, D)
+      # z[,,it] <- z_temp		
       
       it <- it + 1
     }
     setTxtProgressBar(pb, iter/Niter)
   }
   
-  return(list('Z' = z, 
-              'post_mean_delta' = post_mean_delta, 
-              'post_mean_mu' = post_mean_mu,
-              'post_mean_b' = post_mean_b,
-              'post_ind_delta' = post_ind_delta,
-              'post_ind_mu' = post_ind_mu,
-              'post_ind_b' = post_ind_b,
-              'sigma2_mu_us' = sigma2_mu_us, 
-              'sigma2_mu_ua' = sigma2_mu_ua,
-              'sigma2_b_us' = sigma2_b_us, 
-              'sigma2_b_ua' = sigma2_b_ua,
-              'sigma2_1_mu' = sigma2_1_mu, 
-              'sigma2_1_b' = sigma2_1_b, 
-              'pred_ans' = pred_ans, 
-              'pred_time' = pred_time,
-              'pred_ans_ind' = pred_ans_ind, 
-              'pred_time_ind' = pred_time_ind
-              # 'loglik' = loglik_chain
+  return(list(
+    # 'Z' = z, 
+    'post_mean_delta' = post_mean_delta, 
+    'post_mean_mu' = post_mean_mu,
+    'post_mean_b' = post_mean_b,
+    'post_ind_delta' = post_ind_delta,
+    'post_ind_mu' = post_ind_mu,
+    'post_ind_b' = post_ind_b,
+    'sigma2_mu_us' = sigma2_mu_us, 
+    'sigma2_mu_ua' = sigma2_mu_ua,
+    'sigma2_b_us' = sigma2_b_us, 
+    'sigma2_b_ua' = sigma2_b_ua,
+    'sigma2_1_mu' = sigma2_1_mu, 
+    'sigma2_1_b' = sigma2_1_b, 
+    'pred_ans' = pred_ans, 
+    'pred_time' = pred_time,
+    'pred_ans_ind' = pred_ans_ind, 
+    'pred_time_ind' = pred_time_ind,
+    'loglik' = loglik_chain
   ))
 }
 
 
-LDDMM_fix_bound <- function(data, hypers, Niter = 5000, burnin = 2000, thin = 5){
+LDDMM_const_bound <- function(data, hypers, Niter = 5000, burnin = 2000, thin = 5){
   
   # Choose the number of knots (default is between the beginning and the end of 
   # the study, at every block)
@@ -1259,7 +1260,7 @@ LDDMM_fix_bound <- function(data, hypers, Niter = 5000, burnin = 2000, thin = 5)
   pred_ans <- array(NA, dim = c(T_max, d_j[1], samp_size))
   pred_time_ind <- array(NA, dim = c(n_ind, T_max, d_j[1], samp_size))
   pred_ans_ind <- array(NA, dim = c(n_ind, T_max, d_j[1], samp_size))
-  # loglik_chain <- array(NA, dim = c(samp_size, n))
+  loglik_chain <- array(NA, dim = c(samp_size, n))
   
   # Set initial values
   delta_old <- array(NA, dim = c(d_j[1], n_ind))
@@ -1917,32 +1918,35 @@ LDDMM_fix_bound <- function(data, hypers, Niter = 5000, burnin = 2000, thin = 5)
       sigma2_mu_us[it] <- sigma2_mu_us_old
       sigma2_mu_ua[it] <- sigma2_mu_ua_old
       sigma2_1_mu[it] <- sigma2_1_mu_old
-      z[,,it] <- z_temp		
+      # z[,,it] <- z_temp		
+      loglik_chain[it,] <- log_likelihood_ind(tau, mu_dat, b_dat, delta_dat, cens, D)
       
       it <- it + 1
     }
     setTxtProgressBar(pb, iter/Niter)
   }
   
-  return(list('Z' = z, 
-              'post_mean_delta' = post_mean_delta, 
-              'post_mean_mu' = post_mean_mu,
-              'post_mean_b' = post_mean_b,
-              'post_ind_delta' = post_ind_delta,
-              'post_ind_mu' = post_ind_mu,
-              'post_ind_b' = post_ind_b,
-              'sigma2_mu_us' = sigma2_mu_us, 
-              'sigma2_mu_ua' = sigma2_mu_ua,
-              'sigma2_1_mu' = sigma2_1_mu, 
-              'pred_ans' = pred_ans, 
-              'pred_time' = pred_time,
-              'pred_ans_ind' = pred_ans_ind, 
-              'pred_time_ind' = pred_time_ind
+  return(list(
+    # 'Z' = z, 
+    'post_mean_delta' = post_mean_delta, 
+    'post_mean_mu' = post_mean_mu,
+    'post_mean_b' = post_mean_b,
+    'post_ind_delta' = post_ind_delta,
+    'post_ind_mu' = post_ind_mu,
+    'post_ind_b' = post_ind_b,
+    'sigma2_mu_us' = sigma2_mu_us, 
+    'sigma2_mu_ua' = sigma2_mu_ua,
+    'sigma2_1_mu' = sigma2_1_mu, 
+    'pred_ans' = pred_ans, 
+    'pred_time' = pred_time,
+    'pred_ans_ind' = pred_ans_ind, 
+    'pred_time_ind' = pred_time_ind, 
+    'loglik' = loglik_chain
   ))
 }
 
 
-LDDMM_fix_all_bound <- function(data, hypers, Niter = 5000, burnin = 2000, thin = 5){
+LDDMM_fix_bound <- function(data, hypers, Niter = 5000, burnin = 2000, thin = 5){
   
   # Choose the number of knots (default is between the beginning and the end of 
   # the study, at every block)
@@ -2014,13 +2018,13 @@ LDDMM_fix_all_bound <- function(data, hypers, Niter = 5000, burnin = 2000, thin 
   pred_ans <- array(NA, dim = c(T_max, d_j[1], samp_size))
   pred_time_ind <- array(NA, dim = c(n_ind, T_max, d_j[1], samp_size))
   pred_ans_ind <- array(NA, dim = c(n_ind, T_max, d_j[1], samp_size))
-  # loglik_chain <- array(NA, dim = c(samp_size, n))
+  loglik_chain <- array(NA, dim = c(samp_size, n))
   
   # Set initial values
   delta_old <- array(NA, dim = c(d_j[1], n_ind))
   beta_mu_old <- array(NA, dim = c(J, d_j))
   delta_dat <- array(NA, dim = n)
-  b_old <- array(NA, dim = d_j)
+  b_old <- array(NA, dim = d_j[2])
   B_beta_b_dat <- array(0, dim = c(n, d_j[1]))
   for (s_temp in 1:d_j[1]){
     for (i_temp in 1:n_ind){
@@ -2035,10 +2039,12 @@ LDDMM_fix_all_bound <- function(data, hypers, Niter = 5000, burnin = 2000, thin 
     }
     for(j in 1:d_j[2]){
       beta_mu_old[,s_temp,j] <- rep(0.5*log(mean(tau[D[,1] == s_temp])) - log(sd(tau[D[,1] == s_temp])), J)
+      b_old[j] <- 0.5*log(mean(tau)) - log(sd(tau))
+      B_beta_b_dat[,j] <- b_old[j]
     }
   }
-  b_old <- 1.5*log(mean(tau)) - log(sd(tau))
-  B_beta_b_dat <- array(b_old, dim = c(n, d_j[1]))
+  # b_old <- 1.5*log(mean(tau)) - log(sd(tau))
+  # B_beta_b_dat <- array(b_old, dim = c(n, d_j[1]))
   
   
   low_bound_mu <- min(beta_mu_old) - 1.5
@@ -2104,8 +2110,8 @@ LDDMM_fix_all_bound <- function(data, hypers, Niter = 5000, burnin = 2000, thin 
   # MH proposal parameters
   sd_MH_delta <- array(0.3, dim = c(d_j[1], n_ind))
   sd_MH_beta_mu <- 0.4
-  sd_MH_beta_b <- 0.05
-  acc_b <- 0
+  sd_MH_beta_b <- array(0.05, dim = d_j[2])
+  acc_b <- array(0, dim = d_j[2])
   sd_beta_mu_u <-  array(0.4, dim = c(n_ind, J))
   sd_beta_b_u <-  array(0.4, dim = c(n_ind, J))
   acc_delta <- array(0, dim = c(d_j[1], n_ind))
@@ -2118,7 +2124,7 @@ LDDMM_fix_all_bound <- function(data, hypers, Niter = 5000, burnin = 2000, thin 
   B_beta_mu_u_dat <- array(0, dim = c(n, d_j[1]))
   B_beta_b_prop_dat <- array(0, dim = c(n, d_j[1]))
   mu_dat <- exp(B_beta_mu_dat + B_beta_mu_u_dat)
-  b_dat <- matrix(exp(b_old), n, d_j[1])
+  b_dat <- matrix(rep(exp(b_old), each = n), n, d_j[1])
   
   
   # Gibbs Sampler
@@ -2156,14 +2162,15 @@ LDDMM_fix_all_bound <- function(data, hypers, Niter = 5000, burnin = 2000, thin 
           }
         }
       }
-      
-      if (acc_b/iter > 0.44){
-        sd_MH_beta_b <- exp(log(sd_MH_beta_b) + delta_n)
-      }
-      else{
-        sd_MH_beta_b <- exp(log(sd_MH_beta_b) - delta_n)
-      }
-      
+        for (d2 in 1:d_j[2]){
+          if (acc_b[d2]/iter > 0.44){
+            sd_MH_beta_b[d2] <- exp(log(sd_MH_beta_b[d2]) + delta_n)
+          }
+          else{
+            sd_MH_beta_b[d2] <- exp(log(sd_MH_beta_b[d2]) - delta_n)
+          }
+          
+        }
       
     }
     
@@ -2314,31 +2321,40 @@ LDDMM_fix_all_bound <- function(data, hypers, Niter = 5000, burnin = 2000, thin 
       }
     }
     
-    # 2(a) Update the single scalar boundary parameter
-    b_prop <- rnorm(1, b_old, sd_MH_beta_b)
+    # 2(a) Update the constant boundary parameters
+    # for (d1 in 1:d_j[1]){
+    tau_temp <- tau
+    cens_temp <- cens
+    D_temp <- D
     
-    # Modify the proposed values in the corresponding positions
-    B_beta_b_prop_dat <- matrix(b_prop, n, d_j[1])
-    
-    # This is the proposed value for b
-    b_prop_dat <- exp(B_beta_b_prop_dat)
-    
-    logpost_prop <- log_likelihood(tau, mu_dat,
-                                   b_prop_dat, delta_dat,
-                                   cens, D, TRUE)
-    logpost_old <- log_likelihood(tau, mu_dat,
-                                  b_dat, delta_dat,
-                                  cens, D, TRUE)
-    
-    alpha_acc <- min(0, logpost_prop - logpost_old)
-    l_u <- log(runif(1))
-    
-    if (l_u < alpha_acc){
-      b_old <- b_prop
-      b_dat <- b_prop_dat
-      B_beta_b_dat <- B_beta_b_prop_dat
-      acc_b = acc_b + 1
+    for (d2 in 1:d_j[2]){
+      b_prop <- rnorm(1, b_old[d2], sd_MH_beta_b[d2])
+      
+      # Modify the proposed values in the corresponding positions
+      B_beta_b_prop_dat <- B_beta_b_dat
+      B_beta_b_prop_dat[,d2] <- b_prop
+      
+      # This is the proposed value for b
+      b_prop_dat <- exp(B_beta_b_prop_dat)
+      
+      logpost_prop <- log_likelihood(tau_temp, mu_dat, 
+                                     b_prop_dat, delta_dat, 
+                                     cens_temp, D_temp, TRUE)
+      logpost_old <- log_likelihood(tau_temp, mu_dat, 
+                                    b_dat, delta_dat, 
+                                    cens_temp, D_temp, TRUE)
+      
+      alpha_acc <- min(0, logpost_prop - logpost_old)
+      l_u <- log(runif(1))
+      
+      if (l_u < alpha_acc){
+        b_old[d2] <- b_prop
+        B_beta_b_dat <- B_beta_b_prop_dat
+        b_dat <- b_prop_dat
+        acc_b[d2] = acc_b[d2] + 1
+      }
     }
+    
     
     
     # (3) Update the cluster assignments
@@ -2614,11 +2630,11 @@ LDDMM_fix_all_bound <- function(data, hypers, Niter = 5000, burnin = 2000, thin 
       for (h1 in 1:d_j[1]){
         for (h2 in 1:d_j[2]){
           post_mean_mu[,h1,h2,it] <- exp(Bgrid %*% beta_mu_old[,h1,h2] + 0.5 * corr_term_gr_mu)
-          post_mean_b[,h1,h2,it] <- exp(b_old)
+          post_mean_b[,h1,h2,it] <- exp(b_old[h2])
           
           for (i in 1:n_ind){
             post_ind_mu[,i,h1,h2,it] <- exp(Bgrid %*% beta_mu_old[,h1,h2] + Bgrid %*% beta_mu_u_old[i,])
-            post_ind_b[,i,h1,h2,it] <- exp(b_old)
+            post_ind_b[,i,h1,h2,it] <- exp(b_old[h2])
           }
         }
       }
@@ -2657,27 +2673,30 @@ LDDMM_fix_all_bound <- function(data, hypers, Niter = 5000, burnin = 2000, thin 
       sigma2_mu_us[it] <- sigma2_mu_us_old
       sigma2_mu_ua[it] <- sigma2_mu_ua_old
       sigma2_1_mu[it] <- sigma2_1_mu_old
-      z[,,it] <- z_temp		
+      # z[,,it] <- z_temp		
+      loglik_chain[it,] <- log_likelihood_ind(tau, mu_dat, b_dat, delta_dat, cens, D)
       
       it <- it + 1
     }
     setTxtProgressBar(pb, iter/Niter)
   }
   
-  return(list('Z' = z, 
-              'post_mean_delta' = post_mean_delta, 
-              'post_mean_mu' = post_mean_mu,
-              'post_mean_b' = post_mean_b,
-              'post_ind_delta' = post_ind_delta,
-              'post_ind_mu' = post_ind_mu,
-              'post_ind_b' = post_ind_b,
-              'sigma2_mu_us' = sigma2_mu_us, 
-              'sigma2_mu_ua' = sigma2_mu_ua,
-              'sigma2_1_mu' = sigma2_1_mu, 
-              'pred_ans' = pred_ans, 
-              'pred_time' = pred_time,
-              'pred_ans_ind' = pred_ans_ind, 
-              'pred_time_ind' = pred_time_ind
+  return(list(
+    # 'Z' = z, 
+    'post_mean_delta' = post_mean_delta, 
+    'post_mean_mu' = post_mean_mu,
+    'post_mean_b' = post_mean_b,
+    'post_ind_delta' = post_ind_delta,
+    'post_ind_mu' = post_ind_mu,
+    'post_ind_b' = post_ind_b,
+    'sigma2_mu_us' = sigma2_mu_us, 
+    'sigma2_mu_ua' = sigma2_mu_ua,
+    'sigma2_1_mu' = sigma2_1_mu, 
+    'pred_ans' = pred_ans, 
+    'pred_time' = pred_time,
+    'pred_ans_ind' = pred_ans_ind, 
+    'pred_time_ind' = pred_time_ind, 
+    'loglik' = loglik_chain
   ))
 }
 
@@ -2821,3 +2840,26 @@ plot_post_pars = function(data, fit, par = c('drift', 'boundary')){
     scale_x_continuous(breaks=seq(1, K, by = 1)) +
     theme(legend.position = "none")
 }
+
+
+#' Calculate WAIC
+#'
+#' Function to compute the Watanabe-Akaike information criterion (Gelman, Hwang, 
+#' Vehtari, 2014), which estimates the expected out-of-sample-prediction error 
+#' using a bias-corrected adjustment of within-sample error.
+#'
+#' @param model_fit results of a model fit from the lddmm function
+#' @return A scalar indicating the WAIC (smaller WAIC denotes better fit)
+compute_WAIC = function(model_fit) {
+  
+  # log pointwise predictive density 
+  LPPD = sum(log(apply(exp(model_fit$loglik), 2, mean))) 
+  
+  # Penalty term
+  p_WAIC = sum(apply(model_fit$loglik, 2, var))   
+  
+  WAIC = -2 * (LPPD - p_WAIC)
+  
+  return (WAIC) 
+}
+
