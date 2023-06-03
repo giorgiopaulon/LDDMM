@@ -2,7 +2,7 @@
 # LDDMM
 
 An R package for Longitudinal Drift-Diffusion Mixed Models (LDDMM),
-v0.3.
+v0.4.
 
 **Authors**: [Giorgio Paulon](https://giorgiopaulon.github.io/), [Abhra
 Sarkar](https://abhrastat.github.io/)
@@ -108,7 +108,7 @@ compute_WAIC(fit)
 
 
 To extract relevant posterior draws or posterior summaries instead of simply plotting them, one can use the functions `extract_post_mean` or `extract_post_draws`. 
-Auxiliary functions that assume constant boundary parameters over time ($b_{d,s}^{(i)}(t) = b_{d,s}$ using the article notation) or fix the boundaries to the same level across input predictors ($b_{d,s}^{(i)}(t) = b_{d}$ using the article notation) can be called with the options `boundaries = "constant"` and `boundaries = "fixed"`, respectively.
+Auxiliary functions that assume constant boundary parameters over time ($b_{d,s}^{(i)}(t) = b_{d,s} + u_{d,s}^{(i)}$ using the article notation) or fix the boundaries to the same level across input predictors ($b_{d,s}^{(i)}(t) = b_{d}(t) + u^{(i)}_{d}(t)$ using the article notation) can be called with the options `boundaries = "constant"` and `boundaries = "fixed"`, respectively.
 
 
 

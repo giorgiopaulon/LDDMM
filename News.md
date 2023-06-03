@@ -1,4 +1,11 @@
 
+# LDDMM 0.4.0
+
+## Major changes
+
+* Now the option for constant boundaries over time (`boundaries = "constant"`) varies across input tone and decision. The same is true for the random effects. 
+* Now the option for fixed boundaries (`boundaries = "fixed"`) varies across time and is fixed across input tone s. The same is true for the random effects.
+
 # LDDMM 0.3.0
 
 ## Major changes
