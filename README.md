@@ -123,5 +123,5 @@ Please cite the following publication if you use this package in your
 research: Paulon, G., Llanos, F., Chandrasekaran, B., Sarkar, A. (2021).
 [Bayesian semiparametric longitudinal drift-diffusion mixed models for
 tone learning in
-adults](https://www.tandfonline.com/doi/abs/10.1080/01621459.2020.1801448?journalCode=uasa20).
+adults](https://doi.org/10.1080/01621459.2020.1801448).
 Journal of the American Statistical Association **116**, 1114-1127
