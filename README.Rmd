@@ -27,7 +27,7 @@ This package implements a novel generic framework for longitudinal functional mi
 
 The main function is `LDDMM`; please see the following vignette for details, as well as the main article:
 
-Paulon, G., Llanos, F., Chandrasekaran, B., Sarkar, A. (2021). [Bayesian semiparametric longitudinal drift-diffusion mixed models for tone learning in adults](https://www.tandfonline.com/doi/abs/10.1080/01621459.2020.1801448?journalCode=uasa20). Journal of the American Statistical Association **116**, 1114-1127
+Paulon, G., Llanos, F., Chandrasekaran, B., Sarkar, A. (2021). [Bayesian semiparametric longitudinal drift-diffusion mixed models for tone learning in adults](https://doi.org/10.1080/01621459.2020.1801448). Journal of the American Statistical Association **116**, 1114-1127
 
 The data included in this package was analyzed in: 
 
