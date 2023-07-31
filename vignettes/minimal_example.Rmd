@@ -64,5 +64,16 @@ plot_post_pars(data, fit, par = 'boundary')
 compute_WAIC(fit)
 ```
 
-To extract relevant posterior draws or posterior summaries instead of simply plotting them, one can use the functions `extract_post_mean` or `extract_post_draws`. 
-Auxiliary functions that assume constant boundary parameters over time ($b_{d,s}^{(i)}(t) = b_{d,s} + u_{d,s}^{(i)}$ using the article notation), fix the boundaries to the same level across input predictors ($b_{d,s}^{(i)}(t) = b_{d}(t) + u^{(i)}_{d}(t)$ using the article notation), or both ($b_{d,s}^{(i)}(t) = b_{d} + u_{d}^{(i)}$ using the article notation) can be called with the options `boundaries = "constant"`, `boundaries = "fixed"`, and `boundaries = "fixed-constant"` respectively.
+To extract relevant posterior draws or posterior summaries instead of
+simply plotting them, one can use the functions `extract_post_mean` or
+`extract_post_draws`. 
+The following auxiliary functions are available by selecting the corresponding argument in the `LDDMM()` function:
+
+* `boundaries = "constant"`: constant boundary
+parameters over time, $b_{d,s}^{(i)}(t) = b_{d,s} + u_{d,s}^{(i)}$ using
+the article notation
+* `boundaries = "fixed"`: fixed boundaries across input
+predictors, $b_{d,s}^{(i)}(t) = b_{d}(t) + u^{(i)}_{d}(t)$ using the
+article notation
+* `boundaries = "fixed-constant"`: fixed *and* constant boundaries, $b_{d,s}^{(i)}(t) = b_{d} + u_{d}^{(i)}$
+using the article notation
