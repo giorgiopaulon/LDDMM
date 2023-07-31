@@ -1,4 +1,10 @@
 
+# LDDMM 0.4.1
+
+## Major changes
+
+* Added the option for constant and fixed boundaries over time (`boundaries = "fixed-constant"`).
+
 # LDDMM 0.4.0
 
 ## Major changes

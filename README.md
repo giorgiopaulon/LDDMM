@@ -2,7 +2,7 @@
 # LDDMM
 
 An R package for Longitudinal Drift-Diffusion Mixed Models (LDDMM),
-v0.4.
+v0.4.1.
 
 **Authors**: [Giorgio Paulon](https://giorgiopaulon.github.io/), [Abhra
 Sarkar](https://abhrastat.github.io/)
@@ -28,8 +28,7 @@ details, as well as the main article:
 
 Paulon, G., Llanos, F., Chandrasekaran, B., Sarkar, A. (2021). [Bayesian
 semiparametric longitudinal drift-diffusion mixed models for tone
-learning in
-adults](https://doi.org/10.1080/01621459.2020.1801448).
+learning in adults](https://doi.org/10.1080/01621459.2020.1801448).
 Journal of the American Statistical Association **116**, 1114-1127
 
 The data included in this package was analyzed in:
@@ -57,9 +56,9 @@ configure `Rtools` using the following
 
 ### Usage
 
-The following is a minimal example of a simple model fit. 
-For numerical stability, the unit of measurement should be such that the numerical values of most response times should lie in $[0, 10]$.
-
+The following is a minimal example of a simple model fit. For numerical
+stability, the unit of measurement should be such that the numerical
+values of most response times should lie in $[0, 10]$.
 
 ``` r
 # Load libraries
@@ -106,11 +105,16 @@ plot_post_pars(data, fit, par = 'boundary')
 compute_WAIC(fit)
 ```
 
-
-To extract relevant posterior draws or posterior summaries instead of simply plotting them, one can use the functions `extract_post_mean` or `extract_post_draws`. 
-Auxiliary functions that assume constant boundary parameters over time ($b_{d,s}^{(i)}(t) = b_{d,s} + u_{d,s}^{(i)}$ using the article notation), fix the boundaries to the same level across input predictors ($b_{d,s}^{(i)}(t) = b_{d}(t) + u^{(i)}_{d}(t)$ using the article notation), or both ($b_{d,s}^{(i)}(t) = b_{d} + u_{d}^{(i)}$ using the article notation) can be called with the options `boundaries = "constant"`, `boundaries = "fixed"`, and `boundaries = "fixed-constant"` respectively.
-
-
+To extract relevant posterior draws or posterior summaries instead of
+simply plotting them, one can use the functions `extract_post_mean` or
+`extract_post_draws`. Auxiliary functions that assume constant boundary
+parameters over time ($b_{d,s}^{(i)}(t) = b_{d,s} + u_{d,s}^{(i)}$ using
+the article notation), fix the boundaries to the same level across input
+predictors ($b_{d,s}^{(i)}(t) = b_{d}(t) + u^{(i)}_{d}(t)$ using the
+article notation), or both ($b_{d,s}^{(i)}(t) = b_{d} + u_{d}^{(i)}$
+using the article notation) can be called with the options
+`boundaries = "constant"`, `boundaries = "fixed"`, and
+`boundaries = "fixed-constant"` respectively.
 
 ### Questions or bugs
 
@@ -122,6 +126,5 @@ For bug reporting purposes, e-mail Giorgio Paulon
 Please cite the following publication if you use this package in your
 research: Paulon, G., Llanos, F., Chandrasekaran, B., Sarkar, A. (2021).
 [Bayesian semiparametric longitudinal drift-diffusion mixed models for
-tone learning in
-adults](https://doi.org/10.1080/01621459.2020.1801448).
+tone learning in adults](https://doi.org/10.1080/01621459.2020.1801448).
 Journal of the American Statistical Association **116**, 1114-1127

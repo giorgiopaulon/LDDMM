@@ -65,4 +65,4 @@ compute_WAIC(fit)
 ```
 
 To extract relevant posterior draws or posterior summaries instead of simply plotting them, one can use the functions `extract_post_mean` or `extract_post_draws`. 
-Auxiliary functions that assume constant boundary parameters over time ($b_{d,s}^{(i)}(t) = b_{d,s} + u_{d,s}^{(i)}$ using the article notation) or fix the boundaries to the same level across input predictors ($b_{d,s}^{(i)}(t) = b_{d}(t) + u^{(i)}_{d}(t)$ using the article notation) can be called with the options `boundaries = "constant"` and `boundaries = "fixed"`, respectively.
+Auxiliary functions that assume constant boundary parameters over time ($b_{d,s}^{(i)}(t) = b_{d,s} + u_{d,s}^{(i)}$ using the article notation), fix the boundaries to the same level across input predictors ($b_{d,s}^{(i)}(t) = b_{d}(t) + u^{(i)}_{d}(t)$ using the article notation), or both ($b_{d,s}^{(i)}(t) = b_{d} + u_{d}^{(i)}$ using the article notation) can be called with the options `boundaries = "constant"`, `boundaries = "fixed"`, and `boundaries = "fixed-constant"` respectively.

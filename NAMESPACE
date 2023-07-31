@@ -5,7 +5,6 @@ useDynLib(lddmm, .registration = TRUE)
 importFrom("stats", "dgamma", "rnorm", "runif", "sd", "setNames", 
            "quantile", "var")
 importFrom("utils", "data", "setTxtProgressBar", "txtProgressBar")
-importFrom('dplyr', '%>%')
 importFrom('tidyr', 'pivot_wider')
 importFrom('ggplot2', 'ggplot', 'geom_line', 'aes', 'facet_wrap', 'labs', 
            'scale_color_brewer', 'theme', 'element_text', 
