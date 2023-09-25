@@ -2626,7 +2626,7 @@ LDDMM_const_bound = function(data, hypers, cluster = TRUE, Niter = 5000, burnin 
         B_beta_b_prop_dat[,d2] = b_prop
         
         # This is the proposed value for b
-        b_prop_dat = exp(B_beta_b_prop_dat)
+        b_prop_dat = exp(B_beta_b_prop_dat + B_beta_b_u_dat[idx_i,])
         
         logpost_prop = log_likelihood(tau_temp, mu_dat[idx_i,], 
                                       b_prop_dat, delta_dat[idx_i], 
@@ -3447,7 +3447,7 @@ LDDMM_fixandconst_bound = function(data, hypers, cluster = TRUE, Niter = 5000, b
       B_beta_b_prop_dat[,d2] = b_prop
       
       # This is the proposed value for b
-      b_prop_dat = exp(B_beta_b_prop_dat)
+      b_prop_dat = exp(B_beta_b_prop_dat + B_beta_b_u_dat)
       
       logpost_prop = log_likelihood(tau_temp, mu_dat, 
                                     b_prop_dat, delta_dat, 
