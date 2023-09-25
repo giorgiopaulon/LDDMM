@@ -1795,24 +1795,31 @@ LDDMM_fix_bound = function(data, hypers, cluster = TRUE, Niter = 5000, burnin = 
             0.5/sigma2_1_b_old * sum((beta_b_old[k,d] - beta_post1)^2)
         }
         else if (k == J){
-          logpost_prop = log_likelihood(tau_temp, mu_dat[idx_i,], 
-                                        b_prop_dat, delta_dat[idx_i], 
-                                        cens_temp, D_temp, TRUE)
-          logpost_old = log_likelihood(tau_temp, mu_dat[idx_i,], 
-                                       b_dat[idx_i,], delta_dat[idx_i], 
-                                       cens_temp, D_temp, TRUE)
-        }
-        else {
-          beta_post1 = beta_b_old[k+1,d]
+          beta_pre1 = beta_b_old[k-1,d]
           
           logpost_prop = log_likelihood(tau_temp, mu_dat[idx_i,], 
                                         b_prop_dat, delta_dat[idx_i], 
                                         cens_temp, D_temp, TRUE) -
-            0.5/sigma2_1_b_old * sum((beta_b_prop[k,d] - beta_post1)^2)
+            0.5/sigma2_1_b_old * sum((beta_b_prop[k,d] - beta_pre1)^2)
           logpost_old = log_likelihood(tau_temp, mu_dat[idx_i,], 
                                        b_dat[idx_i,], delta_dat[idx_i], 
                                        cens_temp, D_temp, TRUE) -
-            0.5/sigma2_1_b_old * sum((beta_b_old[k,d] - beta_post1)^2)
+            0.5/sigma2_1_b_old * sum((beta_b_old[k,d] - beta_pre1)^2)
+        }
+        else {
+          beta_post1 = beta_b_old[k+1,d]
+          beta_pre1 = beta_b_old[k-1,d]
+          
+          logpost_prop = log_likelihood(tau_temp, mu_dat[idx_i,], 
+                                        b_prop_dat, delta_dat[idx_i], 
+                                        cens_temp, D_temp, TRUE) -
+            0.5/sigma2_1_b_old * sum((beta_b_prop[k,d] - beta_post1)^2) -
+            0.5/sigma2_1_b_old * sum((beta_b_prop[k,d] - beta_pre1)^2)
+          logpost_old = log_likelihood(tau_temp, mu_dat[idx_i,], 
+                                       b_dat[idx_i,], delta_dat[idx_i], 
+                                       cens_temp, D_temp, TRUE) -
+            0.5/sigma2_1_b_old * sum((beta_b_old[k,d] - beta_post1)^2) -
+            0.5/sigma2_1_b_old * sum((beta_b_old[k,d] - beta_pre1)^2)
         }
         
         alpha_acc = min(0, logpost_prop - logpost_old)
