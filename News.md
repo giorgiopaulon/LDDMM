@@ -1,4 +1,11 @@
 
+# LDDMM 0.4.2
+
+## Major changes
+
+* Fixed a bug in the version `boundaries = "fixed"`.
+* Added the function input `cluster` to determine whether to use the clustering model or the unrestricted model.
+
 # LDDMM 0.4.1
 
 ## Major changes

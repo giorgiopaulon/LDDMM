@@ -326,7 +326,7 @@ sample_smooth_var = function(sigma2_ua_old, sigma2_us_old,
 #' * pred_time: predicted population-level response times
 #' * pred_ans_ind: predicted individual-level categories
 #' * pred_time_ind: predicted individual-level response times
-LDDMM = function(data, hypers, boundaries = 'flexible', 
+LDDMM = function(data, hypers, cluster = TRUE, boundaries = 'flexible', 
                  Niter = 5000, burnin = 2000, thin = 5){
   
   # Check for data issues
@@ -345,16 +345,16 @@ LDDMM = function(data, hypers, boundaries = 'flexible',
   
   # Call one of the main functions
   if (boundaries == 'flexible'){
-    fit = LDDMM_full(data, hypers, Niter, burnin, thin)
+    fit = LDDMM_full(data, hypers, cluster, Niter, burnin, thin)
   }
   else if (boundaries == 'constant') {
-    fit = LDDMM_const_bound(data, hypers, Niter, burnin, thin)
+    fit = LDDMM_const_bound(data, hypers, cluster, Niter, burnin, thin)
   }
   else if (boundaries == 'fixed') {
-    fit = LDDMM_fix_bound(data, hypers, Niter, burnin, thin)
+    fit = LDDMM_fix_bound(data, hypers, cluster, Niter, burnin, thin)
   }
   else if (boundaries == 'fixed-constant') {
-    fit = LDDMM_fixandconst_bound(data, hypers, Niter, burnin, thin)
+    fit = LDDMM_fixandconst_bound(data, hypers, cluster, Niter, burnin, thin)
   }
   else {
     stop("The argument boundaries can be only one of the following: flexible, constant, fixed, or fixed-constant")
@@ -415,7 +415,7 @@ LDDMM_full = function(data, hypers, cluster = TRUE, Niter = 5000, burnin = 2000,
   
   # Set HB structures
   r_HB = 1
-  Z_max = if_else(cluster, min(prod(d_j), 6), prod(d_j))
+  Z_max = dplyr::if_else(cluster, min(prod(d_j), 6), prod(d_j))
   dim_HB = sum((Z_max - 1)^(0:r_HB) * choose(d_j[2], 0:r_HB))
   
   # Set MCMC objects
@@ -486,10 +486,10 @@ LDDMM_full = function(data, hypers, cluster = TRUE, Niter = 5000, burnin = 2000,
     z_old[[j]] = array(NA, dim = c(d_j[2], J))
     for (jj in 1:d_j[2]){
       if (j == jj){
-        z_old[[j]][jj,] = if_else(cluster, j, jj + (j - 1) * d_j[1])
+        z_old[[j]][jj,] = dplyr::if_else(cluster, j, jj + (j - 1) * d_j[1])
       }
       else{
-        z_old[[j]][jj,] = if_else(cluster, sample((d_j[1] + 1):Z_max, 1), jj + (j - 1) * d_j[1])
+        z_old[[j]][jj,] = dplyr::if_else(cluster, sample((d_j[1] + 1):Z_max, 1), jj + (j - 1) * d_j[1])
       }
     }
   }
@@ -1407,7 +1407,7 @@ LDDMM_fix_bound = function(data, hypers, cluster = TRUE, Niter = 5000, burnin = 
   
   # Set HB structures
   r_HB = 1
-  Z_max = if_else(cluster, min(prod(d_j), 6), prod(d_j))
+  Z_max = dplyr::if_else(cluster, min(prod(d_j), 6), prod(d_j))
   dim_HB = sum((Z_max - 1)^(0:r_HB) * choose(d_j[2], 0:r_HB))
   
   # Set MCMC objects
@@ -1477,10 +1477,10 @@ LDDMM_fix_bound = function(data, hypers, cluster = TRUE, Niter = 5000, burnin = 
     z_old[[j]] = array(NA, dim = c(d_j[2], J))
     for (jj in 1:d_j[2]){
       if (j == jj){
-        z_old[[j]][jj,] = if_else(cluster, j, jj + (j - 1) * d_j[1])
+        z_old[[j]][jj,] = dplyr::if_else(cluster, j, jj + (j - 1) * d_j[1])
       }
       else{
-        z_old[[j]][jj,] = if_else(cluster, sample((d_j[1] + 1):Z_max, 1), jj + (j - 1) * d_j[1])
+        z_old[[j]][jj,] = dplyr::if_else(cluster, sample((d_j[1] + 1):Z_max, 1), jj + (j - 1) * d_j[1])
       }
     }
   }
@@ -2283,7 +2283,7 @@ LDDMM_const_bound = function(data, hypers, cluster = TRUE, Niter = 5000, burnin 
   
   # Set HB structures
   r_HB = 1
-  Z_max = if_else(cluster, min(prod(d_j), 6), prod(d_j))
+  Z_max = dplyr::if_else(cluster, min(prod(d_j), 6), prod(d_j))
   dim_HB = sum((Z_max - 1)^(0:r_HB) * choose(d_j[2], 0:r_HB))
   
   # Set MCMC objects
@@ -2351,10 +2351,10 @@ LDDMM_const_bound = function(data, hypers, cluster = TRUE, Niter = 5000, burnin 
     z_old[[j]] = array(NA, dim = c(d_j[2], J))
     for (jj in 1:d_j[2]){
       if (j == jj){
-        z_old[[j]][jj,] = if_else(cluster, j, jj + (j - 1) * d_j[1])
+        z_old[[j]][jj,] = dplyr::if_else(cluster, j, jj + (j - 1) * d_j[1])
       }
       else{
-        z_old[[j]][jj,] = if_else(cluster, sample((d_j[1] + 1):Z_max, 1), jj + (j - 1) * d_j[1])
+        z_old[[j]][jj,] = dplyr::if_else(cluster, sample((d_j[1] + 1):Z_max, 1), jj + (j - 1) * d_j[1])
       }
     }
   }
@@ -3108,7 +3108,7 @@ LDDMM_fixandconst_bound = function(data, hypers, cluster = TRUE, Niter = 5000, b
   
   # Set HB structures
   r_HB = 1
-  Z_max = if_else(cluster, min(prod(d_j), 6), prod(d_j))
+  Z_max = dplyr::if_else(cluster, min(prod(d_j), 6), prod(d_j))
   dim_HB = sum((Z_max - 1)^(0:r_HB) * choose(d_j[2], 0:r_HB))
   
   # Set MCMC objects
@@ -3176,10 +3176,10 @@ LDDMM_fixandconst_bound = function(data, hypers, cluster = TRUE, Niter = 5000, b
     z_old[[j]] = array(NA, dim = c(d_j[2], J))
     for (jj in 1:d_j[2]){
       if (j == jj){
-        z_old[[j]][jj,] = if_else(cluster, j, jj + (j - 1) * d_j[1])
+        z_old[[j]][jj,] = dplyr::if_else(cluster, j, jj + (j - 1) * d_j[1])
       }
       else{
-        z_old[[j]][jj,] = if_else(cluster, sample((d_j[1] + 1):Z_max, 1), jj + (j - 1) * d_j[1])
+        z_old[[j]][jj,] = dplyr::if_else(cluster, sample((d_j[1] + 1):Z_max, 1), jj + (j - 1) * d_j[1])
       }
     }
   }
