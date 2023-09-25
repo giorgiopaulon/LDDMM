@@ -2,7 +2,7 @@
 # LDDMM
 
 An R package for Longitudinal Drift-Diffusion Mixed Models (LDDMM),
-v0.4.1.
+v0.4.2.
 
 **Authors**: [Giorgio Paulon](https://giorgiopaulon.github.io/), [Abhra
 Sarkar](https://abhrastat.github.io/)
