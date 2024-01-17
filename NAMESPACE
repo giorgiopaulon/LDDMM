@@ -11,6 +11,7 @@ importFrom('ggplot2', 'ggplot', 'geom_line', 'aes', 'facet_wrap', 'labs',
            'scale_x_continuous', 'geom_point', 'geom_ribbon', 
            'scale_fill_brewer')
 importFrom("latex2exp", "TeX")
+importFrom("RColorBrewer", "brewer.pal")
 export("B_basis", "data",
        "extract_post_draws", "extract_post_mean", "H_ball",
        "LDDMM", "log_likelihood", "log_likelihood_ind", "P_smooth1", "plot_accuracy", 

@@ -303,6 +303,7 @@ sample_smooth_var = function(sigma2_ua_old, sigma2_us_old,
 #' * cens: vector of size n containing the censoring indicators (1 censored, 0 non censored)
 #' @param hypers hyperparameters of the MCMC: list containing "s_sigma_mu" and "s_sigma_b", 
 #'               which are the smoothness parameters for drifts and boundaries, respectively)
+#' @param cluster should clustering be used? (default = TRUE)
 #' @param boundaries whether to fit the unrestricted model (flexible), assume constant 
 #'                   boundaries over time (constant) or fix the boundaries to the same level 
 #'                   across predictors (fixed)

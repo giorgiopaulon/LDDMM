@@ -7,6 +7,7 @@
 LDDMM(
   data,
   hypers,
+  cluster = TRUE,
   boundaries = "flexible",
   Niter = 5000,
   burnin = 2000,
@@ -28,6 +29,8 @@ values of most response times should lie between 0 and 10
 
 \item{hypers}{hyperparameters of the MCMC: list containing "s_sigma_mu" and "s_sigma_b",
 which are the smoothness parameters for drifts and boundaries, respectively)}
+
+\item{cluster}{should clustering be used? (default = TRUE)}
 
 \item{boundaries}{whether to fit the unrestricted model (flexible), assume constant
 boundaries over time (constant) or fix the boundaries to the same level
