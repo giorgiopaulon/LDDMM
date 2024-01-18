@@ -17,6 +17,8 @@ LazyData: true
 LinkingTo: Rcpp, RcppArmadillo, RcppProgress, rgen
 RoxygenNote: 7.2.3
 Roxygen: list(markdown = TRUE)
+URL: https://github.com/giorgiopaulon/lddmm
+BugReports: https://github.com/giorgiopaulon/lddmm/issues
 Suggests: 
     rmarkdown,
     knitr
