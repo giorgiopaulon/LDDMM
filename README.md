@@ -2,7 +2,7 @@
 # LDDMM
 
 An R package for Longitudinal Drift-Diffusion Mixed Models (LDDMM),
-v0.4.2.
+v1.0.0.
 
 **Authors**: [Giorgio Paulon](https://giorgiopaulon.github.io/), [Abhra
 Sarkar](https://abhrastat.github.io/)
@@ -56,73 +56,192 @@ configure `Rtools` using the following
 
 ### Usage
 
-The following is a minimal example of a simple model fit. For numerical
-stability, the unit of measurement should be such that the numerical
-values of most response times should lie in $[0, 10]$.
+The main function is `LDDMM()`. The data are one row per trial with the
+participant, the training block, the input stimulus `s`, the decision
+`d`, the response time and a censoring indicator. For numerical
+stability, most response times should lie in $[0, 10]$; response times
+in seconds work well (the bundled data are in seconds).
 
 ``` r
-# Load libraries
-library(RColorBrewer)
 library(ggplot2)
-library(dplyr)
-library(reshape2)
-library(latex2exp)
 library(lddmm)
+theme_set(theme_bw(base_size = 12))
 
-theme_set(theme_bw(base_size = 14))
-cols <- brewer.pal(9, "Set1")
-
-# Load the data
 data('data')
-
-# Descriptive plots
+head(data)
+#> # A tibble: 6 × 6
+#>   subject block     s     d r_time  cens
+#>     <dbl> <dbl> <dbl> <dbl>  <dbl> <dbl>
+#> 1       1     1     2     1  1.63      0
+#> 2       1     1     2     2  0.802     0
+#> 3       1     1     1     1  1.10      0
+#> 4       1     1     2     1  2.36      0
+#> 5       1     1     1     2  1.73      0
+#> 6       1     1     2     1  1.00      0
 plot_accuracy(data)
-plot_RT(data)
-
-# Run the model
-hypers <- NULL
-hypers$s_sigma_mu <- hypers$s_sigma_b <- 0.1
-
-# Change the number of iterations when running the model
-# Here the number is small so that the code can run in less than 1 minute
-Niter <- 25
-burnin <- 15
-thin <- 1
-samp_size <- (Niter - burnin) / thin
-
-set.seed(123)
-fit <- LDDMM(data = data, 
-             hypers = hypers, 
-             Niter = Niter, 
-             burnin = burnin, 
-             thin = thin)
-
-# Plot the results
-plot_post_pars(data, fit, par = 'drift')
-plot_post_pars(data, fit, par = 'boundary')
-
-# Compute the WAIC to compare models
-compute_WAIC(fit)
 ```
 
-To extract relevant posterior draws or posterior summaries instead of
-simply plotting them, one can use the functions `extract_post_mean` or
-`extract_post_draws`. 
-The following auxiliary functions are available by selecting the corresponding argument in the `LDDMM()` function:
+<img src="man/figures/README-setup-usage-1.png" alt="" width="100%" />
 
-* `boundaries = "constant"`: constant boundary
-parameters over time, $b_{d,s}^{(i)}(t) = b_{d,s} + u_{d,s}^{(i)}$ using
-the article notation
-* `boundaries = "fixed"`: fixed boundaries across input
-predictors, $b_{d,s}^{(i)}(t) = b_{d}(t) + u^{(i)}_{d}(t)$ using the
-article notation
-* `boundaries = "fixed-constant"`: fixed *and* constant boundaries, $b_{d,s}^{(i)}(t) = b_{d} + u_{d}^{(i)}$
-using the article notation
+#### Fitting the model
+
+The run below is short so that the example is quick; for an analysis use
+something like `Niter = 5000, burnin = 2000, thin = 5`.
+
+``` r
+set.seed(123)
+fit <- LDDMM(data = data,
+             hypers = list(s_sigma_mu = 0.1, s_sigma_b = 0.1),
+             Niter = 1000, burnin = 500, thin = 2,
+             save_z = TRUE, verbose = FALSE)
+```
+
+#### Population curves
+
+Posterior means and 90% credible bands of the drifts $\mu_{d,s}(t)$ and
+the boundaries $b_{d,s}(t)$. Panels are input stimuli, colours are
+decisions; the curve with $d = s$ is the correct response.
+
+``` r
+plot_post_pars(data, fit, par = 'drift')
+```
+
+<img src="man/figures/README-curves-1.png" alt="" width="100%" />
+
+``` r
+plot_post_pars(data, fit, par = 'boundary')
+```
+
+<img src="man/figures/README-curves-2.png" alt="" width="100%" />
+
+#### Posterior predictive checks
+
+For every saved draw, the fit simulates one response of every
+participant to every stimulus in every block. `plot_predictive()`
+compares these simulated responses with the data: the proportion of each
+decision, and the 10%, 50% and 90% quantiles of the response times.
+
+``` r
+plot_predictive(data, fit, type = 'response')
+```
+
+<img src="man/figures/README-predictive-1.png" alt="" width="100%" />
+
+``` r
+plot_predictive(data, fit, type = 'rt')
+```
+
+<img src="man/figures/README-predictive-2.png" alt="" width="100%" />
+
+#### Convergence
+
+Trace plots of the smoothness and variance parameters and of the
+population curves should fluctuate around a stable level, and the
+Metropolis-Hastings acceptance rates (stored in the fit) should be
+roughly between 0.2 and 0.6. Co-clustering probabilities of curves that
+are only beginning to separate are estimated with more Monte Carlo error
+than the curves themselves, so for those it is worth running two or more
+chains with different seeds and comparing.
+
+``` r
+traces <- data.frame(draw = seq_along(fit$sigma2_1_mu),
+                     sigma2_1_mu = fit$sigma2_1_mu,
+                     sigma2_mu_ua = fit$sigma2_mu_ua,
+                     drift_block1 = fit$post_mean_mu[1, 1, 1, ],
+                     boundary_block1 = fit$post_mean_b[1, 1, 1, ])
+ggplot(tidyr::pivot_longer(traces, -draw), aes(draw, value)) +
+  geom_line() +
+  facet_wrap(~ name, scales = 'free_y')
+```
+
+<img src="man/figures/README-traces-1.png" alt="" width="100%" />
+
+``` r
+round(sapply(fit$acceptance, mean), 2)
+#>        delta     beta1_mu         U_mu          U_b  sigma2_1_mu sigma2_mu_ua 
+#>         0.46         0.32         0.45         0.45         0.52         0.46 
+#> sigma2_mu_us  sigma2_b_ua     scale_mu      scale_b    ridge_pop   ridge_subj 
+#>         0.37         0.58         0.41         0.35         0.01         0.35 
+#>      beta1_b   sigma2_1_b  sigma2_b_us      alpha_C      alpha_I 
+#>         0.32         0.51         0.39         0.41         0.39
+```
+
+#### Results
+
+`extract_post_mean()` and `extract_post_draws()` return the
+subject-level parameters; `compute_WAIC()` compares models. With
+`save_z = TRUE`, the cluster labels give the posterior probability that
+two curves coincide.
+
+``` r
+head(extract_post_mean(data, fit, par = 'drift'))
+#> # A tibble: 6 × 4
+#>   block subject drift_1_1 drift_2_2
+#>   <int>   <dbl>     <dbl>     <dbl>
+#> 1     1       1     0.511     0.501
+#> 2     2       1     0.508     0.496
+#> 3     3       1     0.542     0.534
+#> 4     4       1     0.585     0.599
+#> 5     5       1     0.584     0.598
+#> 6     1       2     1.07      1.05
+compute_WAIC(fit)
+#> [1] 31769.01
+# probability that the correct-response curves of the two stimuli share a
+# cluster, for each spline coefficient
+round(apply(fit$Z[1, 1, , ] == fit$Z[2, 2, , ], 1, mean), 2)
+#> [1] 0.90 0.82 0.00 0.88 0.00 0.92
+```
+
+#### Model options
+
+Using the article notation, the drift of decision $d$ for input stimulus
+$s$ is $\mu_{d,s}^{(i)}(t) = \exp\{f_{\mu,d,s}(t) + u_{\mu}^{(i)}(t)\}$,
+and the boundary is
+$b_{d,s}^{(i)}(t) = \exp\{f_{b,d,s}(t) + u_{b}^{(i)}(t)\}$. By default
+(`random_effects = "correct-incorrect"`) every participant has one
+random effect curve $u_C^{(i)}(t)$ for correct responses ($d = s$) and
+one $u_I^{(i)}(t)$ for incorrect responses, as in the article;
+`random_effects = "shared"` uses a single curve for both. The boundary
+model is selected with the `boundaries` argument of `LDDMM()`:
+
+- `boundaries = "flexible"` (default): $f_{b,d,s}(t)$ varies over time
+  and is locally clustered together with the drifts
+- `boundaries = "constant"`: constant boundaries over time,
+  $b_{d,s}^{(i)} = \exp(b_{d,s} + u_{b}^{(i)})$
+- `boundaries = "fixed"`: boundaries that vary over time but not across
+  input stimuli,
+  $b_{d,s}^{(i)}(t) = \exp\{f_{b,d}(t) + u_{b}^{(i)}(t)\}$
+- `boundaries = "fixed-constant"`: fixed *and* constant boundaries,
+  $b_{d,s}^{(i)} = \exp(b_{d} + u_{b}^{(i)})$
+
+For the constant models the boundary random effects are scalars rather
+than curves. Use `cluster = FALSE` to give every input-response
+combination its own curve, and `z_max` to change the maximum number of
+clusters at each block.
+
+#### Worked examples
+
+Two scripts installed with the package walk through a complete analysis:
+
+- `toy_example.R` fits the bundled data and adds subject-level curves,
+  co-clustering probabilities, posterior predictive checks, trace plots
+  and a model comparison;
+- `toy_simulation.R` simulates data from the model’s likelihood with
+  known parameters, including a tone that is “anti-learned” (it is
+  answered with another category more and more often), fits the model
+  and compares every part of the posterior with the truth.
+
+``` r
+file.edit(system.file("examples", "toy_example.R", package = "lddmm"))
+file.edit(system.file("examples", "toy_simulation.R", package = "lddmm"))
+```
+
+Version 1.0.0 introduces an improved sampler; see `NEWS.md`.
 
 ### Questions or bugs
 
 For bug reporting purposes, e-mail Giorgio Paulon
-(<giorgio.paulon@utexas.edu>).
+(<giorgiopaulon90@gmail.com>).
 
 ### Citation
 

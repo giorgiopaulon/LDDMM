@@ -8,14 +8,17 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
   fig.path = "man/figures/README-",
-  out.width = "100%"
+  out.width = "100%",
+  fig.width = 8,
+  fig.height = 4.5,
+  dpi = 110
 )
 ```
 
 
 # LDDMM
 
-An R package for Longitudinal Drift-Diffusion Mixed Models (LDDMM), v0.4.2.
+An R package for Longitudinal Drift-Diffusion Mixed Models (LDDMM), v1.0.0.
 
 **Authors**: [Giorgio Paulon](https://giorgiopaulon.github.io/), [Abhra Sarkar](https://abhrastat.github.io/)
 
@@ -46,75 +49,134 @@ If you are using a Windows machine, you might have to also install and configure
 
 ### Usage
 
-The following is a minimal example of a simple model fit. 
-For numerical stability, the unit of measurement should be such that the numerical values of most response times should lie in $[0, 10]$.
+The main function is `LDDMM()`. The data are one row per trial with the
+participant, the training block, the input stimulus `s`, the decision `d`, the
+response time and a censoring indicator. For numerical stability, most response
+times should lie in $[0, 10]$; response times in seconds work well (the bundled
+data are in seconds).
 
-
-
-```{r, eval = TRUE, results = 'hide', fig.show = 'hide', warning = FALSE, message = FALSE}
-# Load libraries
-library(RColorBrewer)
+```{r setup-usage, message = FALSE}
 library(ggplot2)
-library(dplyr)
-library(reshape2)
-library(latex2exp)
 library(lddmm)
+theme_set(theme_bw(base_size = 12))
 
-theme_set(theme_bw(base_size = 14))
-cols <- brewer.pal(9, "Set1")
-
-# Load the data
 data('data')
-
-# Descriptive plots
+head(data)
 plot_accuracy(data)
-plot_RT(data)
-
-# Run the model
-hypers <- NULL
-hypers$s_sigma_mu <- hypers$s_sigma_b <- 0.1
-
-# Change the number of iterations when running the model
-# Here the number is small so that the code can run in less than 1 minute
-Niter <- 25
-burnin <- 15
-thin <- 1
-samp_size <- (Niter - burnin) / thin
-
-set.seed(123)
-fit <- LDDMM(data = data, 
-             hypers = hypers, 
-             Niter = Niter, 
-             burnin = burnin, 
-             thin = thin)
-
-# Plot the results
-plot_post_pars(data, fit, par = 'drift')
-plot_post_pars(data, fit, par = 'boundary')
-
-# Compute the WAIC to compare models
-compute_WAIC(fit)
 ```
 
+#### Fitting the model
 
-To extract relevant posterior draws or posterior summaries instead of
-simply plotting them, one can use the functions `extract_post_mean` or
-`extract_post_draws`. 
-The following auxiliary functions are available by selecting the corresponding argument in the `LDDMM()` function:
+The run below is short so that the example is quick; for an analysis use
+something like `Niter = 5000, burnin = 2000, thin = 5`.
 
-* `boundaries = "constant"`: constant boundary
-parameters over time, $b_{d,s}^{(i)}(t) = b_{d,s} + u_{d,s}^{(i)}$ using
-the article notation
-* `boundaries = "fixed"`: fixed boundaries across input
-predictors, $b_{d,s}^{(i)}(t) = b_{d}(t) + u^{(i)}_{d}(t)$ using the
-article notation
-* `boundaries = "fixed-constant"`: fixed *and* constant boundaries, $b_{d,s}^{(i)}(t) = b_{d} + u_{d}^{(i)}$
-using the article notation
+```{r fit}
+set.seed(123)
+fit <- LDDMM(data = data,
+             hypers = list(s_sigma_mu = 0.1, s_sigma_b = 0.1),
+             Niter = 1000, burnin = 500, thin = 2,
+             save_z = TRUE, verbose = FALSE)
+```
 
+#### Population curves
+
+Posterior means and 90% credible bands of the drifts $\mu_{d,s}(t)$ and the
+boundaries $b_{d,s}(t)$. Panels are input stimuli, colours are decisions; the
+curve with $d = s$ is the correct response.
+
+```{r curves}
+plot_post_pars(data, fit, par = 'drift')
+plot_post_pars(data, fit, par = 'boundary')
+```
+
+#### Posterior predictive checks
+
+For every saved draw, the fit simulates one response of every participant to
+every stimulus in every block. `plot_predictive()` compares these simulated
+responses with the data: the proportion of each decision, and the 10%, 50%
+and 90% quantiles of the response times.
+
+```{r predictive}
+plot_predictive(data, fit, type = 'response')
+plot_predictive(data, fit, type = 'rt')
+```
+
+#### Convergence
+
+Trace plots of the smoothness and variance parameters and of the population
+curves should fluctuate around a stable level, and the Metropolis-Hastings
+acceptance rates (stored in the fit) should be roughly between 0.2 and 0.6.
+Co-clustering probabilities of curves that are only beginning to separate are
+estimated with more Monte Carlo error than the curves themselves, so for those
+it is worth running two or more chains with different seeds and comparing.
+
+```{r traces}
+traces <- data.frame(draw = seq_along(fit$sigma2_1_mu),
+                     sigma2_1_mu = fit$sigma2_1_mu,
+                     sigma2_mu_ua = fit$sigma2_mu_ua,
+                     drift_block1 = fit$post_mean_mu[1, 1, 1, ],
+                     boundary_block1 = fit$post_mean_b[1, 1, 1, ])
+ggplot(tidyr::pivot_longer(traces, -draw), aes(draw, value)) +
+  geom_line() +
+  facet_wrap(~ name, scales = 'free_y')
+round(sapply(fit$acceptance, mean), 2)
+```
+
+#### Results
+
+`extract_post_mean()` and `extract_post_draws()` return the subject-level
+parameters; `compute_WAIC()` compares models. With `save_z = TRUE`, the cluster
+labels give the posterior probability that two curves coincide.
+
+```{r results}
+head(extract_post_mean(data, fit, par = 'drift'))
+compute_WAIC(fit)
+# probability that the correct-response curves of the two stimuli share a
+# cluster, for each spline coefficient
+round(apply(fit$Z[1, 1, , ] == fit$Z[2, 2, , ], 1, mean), 2)
+```
+
+#### Model options
+
+Using the article notation, the drift of decision $d$ for input stimulus $s$ is
+$\mu_{d,s}^{(i)}(t) = \exp\{f_{\mu,d,s}(t) + u_{\mu}^{(i)}(t)\}$, and the boundary is
+$b_{d,s}^{(i)}(t) = \exp\{f_{b,d,s}(t) + u_{b}^{(i)}(t)\}$.
+By default (`random_effects = "correct-incorrect"`) every participant has one random effect curve
+$u_C^{(i)}(t)$ for correct responses ($d = s$) and one $u_I^{(i)}(t)$ for incorrect responses,
+as in the article; `random_effects = "shared"` uses a single curve for both.
+The boundary model is selected with the `boundaries` argument of `LDDMM()`:
+
+* `boundaries = "flexible"` (default): $f_{b,d,s}(t)$ varies over time and is locally clustered together with the drifts
+* `boundaries = "constant"`: constant boundaries over time, $b_{d,s}^{(i)} = \exp(b_{d,s} + u_{b}^{(i)})$
+* `boundaries = "fixed"`: boundaries that vary over time but not across input stimuli, $b_{d,s}^{(i)}(t) = \exp\{f_{b,d}(t) + u_{b}^{(i)}(t)\}$
+* `boundaries = "fixed-constant"`: fixed *and* constant boundaries, $b_{d,s}^{(i)} = \exp(b_{d} + u_{b}^{(i)})$
+
+For the constant models the boundary random effects are scalars rather than curves.
+Use `cluster = FALSE` to give every input-response combination its own curve,
+and `z_max` to change the maximum number of clusters at each block.
+
+#### Worked examples
+
+Two scripts installed with the package walk through a complete analysis:
+
+* `toy_example.R` fits the bundled data and adds subject-level curves,
+  co-clustering probabilities, posterior predictive checks, trace plots and a
+  model comparison;
+* `toy_simulation.R` simulates data from the model's likelihood with known
+  parameters, including a tone that is "anti-learned" (it is answered with
+  another category more and more often), fits the model and compares every part
+  of the posterior with the truth.
+
+```{r examples, eval = FALSE}
+file.edit(system.file("examples", "toy_example.R", package = "lddmm"))
+file.edit(system.file("examples", "toy_simulation.R", package = "lddmm"))
+```
+
+Version 1.0.0 introduces an improved sampler; see `NEWS.md`.
 
 ### Questions or bugs
 
-For bug reporting purposes, e-mail Giorgio Paulon (giorgio.paulon@utexas.edu).
+For bug reporting purposes, e-mail Giorgio Paulon (giorgiopaulon90@gmail.com).
 
 ### Citation
 

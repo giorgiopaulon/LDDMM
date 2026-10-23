@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{log_likelihood_ind}
 \alias{log_likelihood_ind}
-\title{Log-likelihood computation for a single observation}
+\title{Log-likelihood of each observation}
 \usage{
 log_likelihood_ind(tau, mu, b, delta, cens, D)
 }
@@ -21,9 +21,14 @@ to the n response times}
 \item{cens}{vector of size n containing censoring indicators (1 censored, 0
 not censored) corresponding to the n response times}
 
-\item{D}{(n x 2) matrix whose first column has the n input stimuli, and whose second column has the n decision categories}
+\item{D}{(n x 2) matrix whose first column has the n input stimuli, and whose
+second column has the n decision categories}
+}
+\value{
+Vector of n log-likelihood values. An uncensored response time that
+is not larger than its offset has log-likelihood \code{-Inf}.
 }
 \description{
-Compute the log-likelihood for the drift-diffusion model, including the
-censored data contribution, for a single observation.
+Log-likelihood of the inverse Gaussian race model for every observation,
+including the contribution of censored observations.
 }
