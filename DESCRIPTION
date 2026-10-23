@@ -1,7 +1,7 @@
 Package: lddmm
 Type: Package
 Title: Longitudinal Drift-Diffusion Mixed Models (LDDMM)
-Version: 1.0.0
+Version: 1.0.0.9000
 Date: 2026-10-22
 Authors@R: c(person("Giorgio", "Paulon", email = "giorgiopaulon90@gmail.com",
                     role = c("aut", "cre")), 

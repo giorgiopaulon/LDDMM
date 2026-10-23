@@ -1,3 +1,5 @@
+# LDDMM (development version)
+
 # LDDMM 1.0.0
 
 This major release introduces an improved sampler.
