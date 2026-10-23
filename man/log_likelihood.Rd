@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{log_likelihood}
 \alias{log_likelihood}
-\title{Log-likelihood computation}
+\title{Log-likelihood}
 \usage{
 log_likelihood(tau, mu, b, delta, cens, D, log)
 }
@@ -21,11 +21,15 @@ to the n response times}
 \item{cens}{vector of size n containing censoring indicators (1 censored, 0
 not censored) corresponding to the n response times}
 
-\item{D}{(n x 2) matrix whose first column has the n input stimuli, and whose second column has the n decision categories}
+\item{D}{(n x 2) matrix whose first column has the n input stimuli, and whose
+second column has the n decision categories}
 
-\item{log}{should the results be returned on the log scale?}
+\item{log}{should the result be returned on the log scale?}
+}
+\value{
+The (log-)likelihood of all n observations.
 }
 \description{
-Compute the log-likelihood for the drift-diffusion model, including the
-censored data contribution.
+Log-likelihood of the inverse Gaussian race model (article eq. 2), including
+the contribution of censored observations.
 }

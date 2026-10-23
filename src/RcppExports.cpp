@@ -11,159 +11,205 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
-// log_likelihood_ind
-arma::vec log_likelihood_ind(arma::vec tau, arma::mat mu, arma::mat b, arma::vec delta, arma::uvec cens, arma::umat D);
-RcppExport SEXP _lddmm_log_likelihood_ind(SEXP tauSEXP, SEXP muSEXP, SEXP bSEXP, SEXP deltaSEXP, SEXP censSEXP, SEXP DSEXP) {
+// hb_log_target
+double hb_log_target(int s, const arma::imat& z_all, int Z, const arma::imat& z_s, const arma::mat& beta_mu, const arma::mat& beta_b, bool flexible, const Rcpp::List& rows_by_block, const arma::vec& tau, const arma::vec& delta_t, const arma::ivec& dec, const arma::mat& lmu_re, const arma::mat& lb_fix, const arma::mat& lb_re, const arma::mat& logQ_C, const arma::mat& logQ_I, const arma::vec& logpi0_C, const arma::vec& logpi0_I, double sigma2_mu, double sigma2_b, double mu0_mu, double s20_mu, double mu0_b, double s20_b, double tau2);
+RcppExport SEXP _lddmm_hb_log_target(SEXP sSEXP, SEXP z_allSEXP, SEXP ZSEXP, SEXP z_sSEXP, SEXP beta_muSEXP, SEXP beta_bSEXP, SEXP flexibleSEXP, SEXP rows_by_blockSEXP, SEXP tauSEXP, SEXP delta_tSEXP, SEXP decSEXP, SEXP lmu_reSEXP, SEXP lb_fixSEXP, SEXP lb_reSEXP, SEXP logQ_CSEXP, SEXP logQ_ISEXP, SEXP logpi0_CSEXP, SEXP logpi0_ISEXP, SEXP sigma2_muSEXP, SEXP sigma2_bSEXP, SEXP mu0_muSEXP, SEXP s20_muSEXP, SEXP mu0_bSEXP, SEXP s20_bSEXP, SEXP tau2SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< int >::type s(sSEXP);
+    Rcpp::traits::input_parameter< const arma::imat& >::type z_all(z_allSEXP);
+    Rcpp::traits::input_parameter< int >::type Z(ZSEXP);
+    Rcpp::traits::input_parameter< const arma::imat& >::type z_s(z_sSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type beta_mu(beta_muSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type beta_b(beta_bSEXP);
+    Rcpp::traits::input_parameter< bool >::type flexible(flexibleSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type rows_by_block(rows_by_blockSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type tau(tauSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type delta_t(delta_tSEXP);
+    Rcpp::traits::input_parameter< const arma::ivec& >::type dec(decSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type lmu_re(lmu_reSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type lb_fix(lb_fixSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type lb_re(lb_reSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type logQ_C(logQ_CSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type logQ_I(logQ_ISEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type logpi0_C(logpi0_CSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type logpi0_I(logpi0_ISEXP);
+    Rcpp::traits::input_parameter< double >::type sigma2_mu(sigma2_muSEXP);
+    Rcpp::traits::input_parameter< double >::type sigma2_b(sigma2_bSEXP);
+    Rcpp::traits::input_parameter< double >::type mu0_mu(mu0_muSEXP);
+    Rcpp::traits::input_parameter< double >::type s20_mu(s20_muSEXP);
+    Rcpp::traits::input_parameter< double >::type mu0_b(mu0_bSEXP);
+    Rcpp::traits::input_parameter< double >::type s20_b(s20_bSEXP);
+    Rcpp::traits::input_parameter< double >::type tau2(tau2SEXP);
+    rcpp_result_gen = Rcpp::wrap(hb_log_target(s, z_all, Z, z_s, beta_mu, beta_b, flexible, rows_by_block, tau, delta_t, dec, lmu_re, lb_fix, lb_re, logQ_C, logQ_I, logpi0_C, logpi0_I, sigma2_mu, sigma2_b, mu0_mu, s20_mu, mu0_b, s20_b, tau2));
+    return rcpp_result_gen;
+END_RCPP
+}
+// hb_update_stimulus
+arma::imat hb_update_stimulus(int s, const arma::imat& z_all, int Z, const arma::mat& beta_mu, const arma::mat& beta_b, bool flexible, const Rcpp::List& rows_by_block, const arma::vec& tau, const arma::vec& delta_t, const arma::ivec& dec, const arma::mat& lmu_re, const arma::mat& lb_fix, const arma::mat& lb_re, const arma::mat& logQ_C, const arma::mat& logQ_I, const arma::vec& logpi0_C, const arma::vec& logpi0_I, double sigma2_mu, double sigma2_b, double mu0_mu, double s20_mu, double mu0_b, double s20_b, double tau2, bool informed, bool drop_norm, bool simple_prior);
+RcppExport SEXP _lddmm_hb_update_stimulus(SEXP sSEXP, SEXP z_allSEXP, SEXP ZSEXP, SEXP beta_muSEXP, SEXP beta_bSEXP, SEXP flexibleSEXP, SEXP rows_by_blockSEXP, SEXP tauSEXP, SEXP delta_tSEXP, SEXP decSEXP, SEXP lmu_reSEXP, SEXP lb_fixSEXP, SEXP lb_reSEXP, SEXP logQ_CSEXP, SEXP logQ_ISEXP, SEXP logpi0_CSEXP, SEXP logpi0_ISEXP, SEXP sigma2_muSEXP, SEXP sigma2_bSEXP, SEXP mu0_muSEXP, SEXP s20_muSEXP, SEXP mu0_bSEXP, SEXP s20_bSEXP, SEXP tau2SEXP, SEXP informedSEXP, SEXP drop_normSEXP, SEXP simple_priorSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::vec >::type tau(tauSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type mu(muSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type b(bSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type delta(deltaSEXP);
-    Rcpp::traits::input_parameter< arma::uvec >::type cens(censSEXP);
-    Rcpp::traits::input_parameter< arma::umat >::type D(DSEXP);
+    Rcpp::traits::input_parameter< int >::type s(sSEXP);
+    Rcpp::traits::input_parameter< const arma::imat& >::type z_all(z_allSEXP);
+    Rcpp::traits::input_parameter< int >::type Z(ZSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type beta_mu(beta_muSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type beta_b(beta_bSEXP);
+    Rcpp::traits::input_parameter< bool >::type flexible(flexibleSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type rows_by_block(rows_by_blockSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type tau(tauSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type delta_t(delta_tSEXP);
+    Rcpp::traits::input_parameter< const arma::ivec& >::type dec(decSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type lmu_re(lmu_reSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type lb_fix(lb_fixSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type lb_re(lb_reSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type logQ_C(logQ_CSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type logQ_I(logQ_ISEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type logpi0_C(logpi0_CSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type logpi0_I(logpi0_ISEXP);
+    Rcpp::traits::input_parameter< double >::type sigma2_mu(sigma2_muSEXP);
+    Rcpp::traits::input_parameter< double >::type sigma2_b(sigma2_bSEXP);
+    Rcpp::traits::input_parameter< double >::type mu0_mu(mu0_muSEXP);
+    Rcpp::traits::input_parameter< double >::type s20_mu(s20_muSEXP);
+    Rcpp::traits::input_parameter< double >::type mu0_b(mu0_bSEXP);
+    Rcpp::traits::input_parameter< double >::type s20_b(s20_bSEXP);
+    Rcpp::traits::input_parameter< double >::type tau2(tau2SEXP);
+    Rcpp::traits::input_parameter< bool >::type informed(informedSEXP);
+    Rcpp::traits::input_parameter< bool >::type drop_norm(drop_normSEXP);
+    Rcpp::traits::input_parameter< bool >::type simple_prior(simple_priorSEXP);
+    rcpp_result_gen = Rcpp::wrap(hb_update_stimulus(s, z_all, Z, beta_mu, beta_b, flexible, rows_by_block, tau, delta_t, dec, lmu_re, lb_fix, lb_re, logQ_C, logQ_I, logpi0_C, logpi0_I, sigma2_mu, sigma2_b, mu0_mu, s20_mu, mu0_b, s20_b, tau2, informed, drop_norm, simple_prior));
+    return rcpp_result_gen;
+END_RCPP
+}
+// log_likelihood_ind
+Rcpp::NumericVector log_likelihood_ind(const arma::vec& tau, const arma::mat& mu, const arma::mat& b, const arma::vec& delta, const arma::vec& cens, const arma::mat& D);
+RcppExport SEXP _lddmm_log_likelihood_ind(SEXP tauSEXP, SEXP muSEXP, SEXP bSEXP, SEXP deltaSEXP, SEXP censSEXP, SEXP DSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< const arma::vec& >::type tau(tauSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type b(bSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type delta(deltaSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type cens(censSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type D(DSEXP);
     rcpp_result_gen = Rcpp::wrap(log_likelihood_ind(tau, mu, b, delta, cens, D));
     return rcpp_result_gen;
 END_RCPP
 }
 // log_likelihood
-double log_likelihood(arma::vec tau, arma::mat mu, arma::mat b, arma::vec delta, arma::uvec cens, arma::umat D, bool log);
+double log_likelihood(const arma::vec& tau, const arma::mat& mu, const arma::mat& b, const arma::vec& delta, const arma::vec& cens, const arma::mat& D, bool log);
 RcppExport SEXP _lddmm_log_likelihood(SEXP tauSEXP, SEXP muSEXP, SEXP bSEXP, SEXP deltaSEXP, SEXP censSEXP, SEXP DSEXP, SEXP logSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::vec >::type tau(tauSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type mu(muSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type b(bSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type delta(deltaSEXP);
-    Rcpp::traits::input_parameter< arma::uvec >::type cens(censSEXP);
-    Rcpp::traits::input_parameter< arma::umat >::type D(DSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type tau(tauSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type b(bSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type delta(deltaSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type cens(censSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type D(DSEXP);
     Rcpp::traits::input_parameter< bool >::type log(logSEXP);
     rcpp_result_gen = Rcpp::wrap(log_likelihood(tau, mu, b, delta, cens, D, log));
     return rcpp_result_gen;
 END_RCPP
 }
-// table_int
-arma::uvec table_int(arma::uvec x, unsigned int K);
-RcppExport SEXP _lddmm_table_int(SEXP xSEXP, SEXP KSEXP) {
+// ll_matrix
+arma::mat ll_matrix(const arma::vec& tau, const arma::vec& delta, const arma::ivec& dec, const arma::mat& log_mu, const arma::mat& log_b);
+RcppExport SEXP _lddmm_ll_matrix(SEXP tauSEXP, SEXP deltaSEXP, SEXP decSEXP, SEXP log_muSEXP, SEXP log_bSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::uvec >::type x(xSEXP);
-    Rcpp::traits::input_parameter< unsigned int >::type K(KSEXP);
-    rcpp_result_gen = Rcpp::wrap(table_int(x, K));
+    Rcpp::traits::input_parameter< const arma::vec& >::type tau(tauSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type delta(deltaSEXP);
+    Rcpp::traits::input_parameter< const arma::ivec& >::type dec(decSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type log_mu(log_muSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type log_b(log_bSEXP);
+    rcpp_result_gen = Rcpp::wrap(ll_matrix(tau, delta, dec, log_mu, log_b));
     return rcpp_result_gen;
 END_RCPP
 }
-// sum_rows_log
-arma::vec sum_rows_log(arma::mat Q);
-RcppExport SEXP _lddmm_sum_rows_log(SEXP QSEXP) {
+// ll_entries
+arma::vec ll_entries(const arma::vec& tau, const arma::vec& delta, const arma::ivec& dec, const arma::uvec& rows, const arma::uvec& cols, const arma::vec& log_mu, const arma::vec& log_b);
+RcppExport SEXP _lddmm_ll_entries(SEXP tauSEXP, SEXP deltaSEXP, SEXP decSEXP, SEXP rowsSEXP, SEXP colsSEXP, SEXP log_muSEXP, SEXP log_bSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::mat >::type Q(QSEXP);
-    rcpp_result_gen = Rcpp::wrap(sum_rows_log(Q));
+    Rcpp::traits::input_parameter< const arma::vec& >::type tau(tauSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type delta(deltaSEXP);
+    Rcpp::traits::input_parameter< const arma::ivec& >::type dec(decSEXP);
+    Rcpp::traits::input_parameter< const arma::uvec& >::type rows(rowsSEXP);
+    Rcpp::traits::input_parameter< const arma::uvec& >::type cols(colsSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type log_mu(log_muSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type log_b(log_bSEXP);
+    rcpp_result_gen = Rcpp::wrap(ll_entries(tau, delta, dec, rows, cols, log_mu, log_b));
     return rcpp_result_gen;
 END_RCPP
 }
-// normalise_log
-arma::vec normalise_log(arma::vec x);
-RcppExport SEXP _lddmm_normalise_log(SEXP xSEXP) {
+// update_delta_cpp
+Rcpp::List update_delta_cpp(const arma::vec& tau, const arma::ivec& dec, const arma::mat& log_mu, const arma::mat& log_b, arma::mat LL, arma::mat delta, const Rcpp::List& rows_si, const arma::mat& delta_max, const arma::mat& sd);
+RcppExport SEXP _lddmm_update_delta_cpp(SEXP tauSEXP, SEXP decSEXP, SEXP log_muSEXP, SEXP log_bSEXP, SEXP LLSEXP, SEXP deltaSEXP, SEXP rows_siSEXP, SEXP delta_maxSEXP, SEXP sdSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::vec >::type x(xSEXP);
-    rcpp_result_gen = Rcpp::wrap(normalise_log(x));
+    Rcpp::traits::input_parameter< const arma::vec& >::type tau(tauSEXP);
+    Rcpp::traits::input_parameter< const arma::ivec& >::type dec(decSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type log_mu(log_muSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type log_b(log_bSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type LL(LLSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type delta(deltaSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type rows_si(rows_siSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type delta_max(delta_maxSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type sd(sdSEXP);
+    rcpp_result_gen = Rcpp::wrap(update_delta_cpp(tau, dec, log_mu, log_b, LL, delta, rows_si, delta_max, sd));
     return rcpp_result_gen;
 END_RCPP
 }
-// rdirichlet
-arma::vec rdirichlet(arma::vec deltas);
-RcppExport SEXP _lddmm_rdirichlet(SEXP deltasSEXP) {
+// update_re_cpp
+Rcpp::List update_re_cpp(const arma::vec& tau, const arma::vec& delta_t, const arma::ivec& dec, const arma::ivec& stim, const arma::mat& fix, arma::mat re, const arma::mat& log_other, bool is_drift, arma::mat LL, arma::cube U, const arma::mat& Bu, const Rcpp::List& rows_ik, const arma::mat& Prec, const arma::cube& sd, int mode);
+RcppExport SEXP _lddmm_update_re_cpp(SEXP tauSEXP, SEXP delta_tSEXP, SEXP decSEXP, SEXP stimSEXP, SEXP fixSEXP, SEXP reSEXP, SEXP log_otherSEXP, SEXP is_driftSEXP, SEXP LLSEXP, SEXP USEXP, SEXP BuSEXP, SEXP rows_ikSEXP, SEXP PrecSEXP, SEXP sdSEXP, SEXP modeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::vec >::type deltas(deltasSEXP);
-    rcpp_result_gen = Rcpp::wrap(rdirichlet(deltas));
+    Rcpp::traits::input_parameter< const arma::vec& >::type tau(tauSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type delta_t(delta_tSEXP);
+    Rcpp::traits::input_parameter< const arma::ivec& >::type dec(decSEXP);
+    Rcpp::traits::input_parameter< const arma::ivec& >::type stim(stimSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type fix(fixSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type re(reSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type log_other(log_otherSEXP);
+    Rcpp::traits::input_parameter< bool >::type is_drift(is_driftSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type LL(LLSEXP);
+    Rcpp::traits::input_parameter< arma::cube >::type U(USEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type Bu(BuSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type rows_ik(rows_ikSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type Prec(PrecSEXP);
+    Rcpp::traits::input_parameter< const arma::cube& >::type sd(sdSEXP);
+    Rcpp::traits::input_parameter< int >::type mode(modeSEXP);
+    rcpp_result_gen = Rcpp::wrap(update_re_cpp(tau, delta_t, dec, stim, fix, re, log_other, is_drift, LL, U, Bu, rows_ik, Prec, sd, mode));
     return rcpp_result_gen;
 END_RCPP
 }
-// count_assign
-arma::umat count_assign(arma::umat z, unsigned int M);
-RcppExport SEXP _lddmm_count_assign(SEXP zSEXP, SEXP MSEXP) {
+// rinvgauss_cpp
+arma::vec rinvgauss_cpp(const arma::vec& mean, const arma::vec& shape);
+RcppExport SEXP _lddmm_rinvgauss_cpp(SEXP meanSEXP, SEXP shapeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::umat >::type z(zSEXP);
-    Rcpp::traits::input_parameter< unsigned int >::type M(MSEXP);
-    rcpp_result_gen = Rcpp::wrap(count_assign(z, M));
-    return rcpp_result_gen;
-END_RCPP
-}
-// sample_reff_mu
-Rcpp::List sample_reff_mu(arma::vec tau, arma::umat D, arma::uvec cens, arma::mat beta_u_old, arma::vec delta_dat, arma::mat b_dat, arma::mat B_beta_dat, arma::mat mu_dat_old, arma::mat B, arma::mat P, arma::uvec ind, arma::uvec time, double sigma2_us, double sigma2_ua, arma::mat sd_beta_u, arma::mat acc_beta_u);
-RcppExport SEXP _lddmm_sample_reff_mu(SEXP tauSEXP, SEXP DSEXP, SEXP censSEXP, SEXP beta_u_oldSEXP, SEXP delta_datSEXP, SEXP b_datSEXP, SEXP B_beta_datSEXP, SEXP mu_dat_oldSEXP, SEXP BSEXP, SEXP PSEXP, SEXP indSEXP, SEXP timeSEXP, SEXP sigma2_usSEXP, SEXP sigma2_uaSEXP, SEXP sd_beta_uSEXP, SEXP acc_beta_uSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::vec >::type tau(tauSEXP);
-    Rcpp::traits::input_parameter< arma::umat >::type D(DSEXP);
-    Rcpp::traits::input_parameter< arma::uvec >::type cens(censSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type beta_u_old(beta_u_oldSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type delta_dat(delta_datSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type b_dat(b_datSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type B_beta_dat(B_beta_datSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type mu_dat_old(mu_dat_oldSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type B(BSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type P(PSEXP);
-    Rcpp::traits::input_parameter< arma::uvec >::type ind(indSEXP);
-    Rcpp::traits::input_parameter< arma::uvec >::type time(timeSEXP);
-    Rcpp::traits::input_parameter< double >::type sigma2_us(sigma2_usSEXP);
-    Rcpp::traits::input_parameter< double >::type sigma2_ua(sigma2_uaSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type sd_beta_u(sd_beta_uSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type acc_beta_u(acc_beta_uSEXP);
-    rcpp_result_gen = Rcpp::wrap(sample_reff_mu(tau, D, cens, beta_u_old, delta_dat, b_dat, B_beta_dat, mu_dat_old, B, P, ind, time, sigma2_us, sigma2_ua, sd_beta_u, acc_beta_u));
-    return rcpp_result_gen;
-END_RCPP
-}
-// sample_reff_b
-Rcpp::List sample_reff_b(arma::vec tau, arma::umat D, arma::uvec cens, arma::mat beta_u_old, arma::vec delta_dat, arma::mat B_beta_dat, arma::mat b_dat_old, arma::mat mu_dat, arma::mat B, arma::mat P, arma::uvec ind, arma::uvec time, double sigma2_us, double sigma2_ua, arma::mat sd_beta_u, arma::mat acc_beta_u);
-RcppExport SEXP _lddmm_sample_reff_b(SEXP tauSEXP, SEXP DSEXP, SEXP censSEXP, SEXP beta_u_oldSEXP, SEXP delta_datSEXP, SEXP B_beta_datSEXP, SEXP b_dat_oldSEXP, SEXP mu_datSEXP, SEXP BSEXP, SEXP PSEXP, SEXP indSEXP, SEXP timeSEXP, SEXP sigma2_usSEXP, SEXP sigma2_uaSEXP, SEXP sd_beta_uSEXP, SEXP acc_beta_uSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::vec >::type tau(tauSEXP);
-    Rcpp::traits::input_parameter< arma::umat >::type D(DSEXP);
-    Rcpp::traits::input_parameter< arma::uvec >::type cens(censSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type beta_u_old(beta_u_oldSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type delta_dat(delta_datSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type B_beta_dat(B_beta_datSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type b_dat_old(b_dat_oldSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type mu_dat(mu_datSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type B(BSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type P(PSEXP);
-    Rcpp::traits::input_parameter< arma::uvec >::type ind(indSEXP);
-    Rcpp::traits::input_parameter< arma::uvec >::type time(timeSEXP);
-    Rcpp::traits::input_parameter< double >::type sigma2_us(sigma2_usSEXP);
-    Rcpp::traits::input_parameter< double >::type sigma2_ua(sigma2_uaSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type sd_beta_u(sd_beta_uSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type acc_beta_u(acc_beta_uSEXP);
-    rcpp_result_gen = Rcpp::wrap(sample_reff_b(tau, D, cens, beta_u_old, delta_dat, B_beta_dat, b_dat_old, mu_dat, B, P, ind, time, sigma2_us, sigma2_ua, sd_beta_u, acc_beta_u));
+    Rcpp::traits::input_parameter< const arma::vec& >::type mean(meanSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type shape(shapeSEXP);
+    rcpp_result_gen = Rcpp::wrap(rinvgauss_cpp(mean, shape));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_lddmm_hb_log_target", (DL_FUNC) &_lddmm_hb_log_target, 25},
+    {"_lddmm_hb_update_stimulus", (DL_FUNC) &_lddmm_hb_update_stimulus, 27},
     {"_lddmm_log_likelihood_ind", (DL_FUNC) &_lddmm_log_likelihood_ind, 6},
     {"_lddmm_log_likelihood", (DL_FUNC) &_lddmm_log_likelihood, 7},
-    {"_lddmm_table_int", (DL_FUNC) &_lddmm_table_int, 2},
-    {"_lddmm_sum_rows_log", (DL_FUNC) &_lddmm_sum_rows_log, 1},
-    {"_lddmm_normalise_log", (DL_FUNC) &_lddmm_normalise_log, 1},
-    {"_lddmm_rdirichlet", (DL_FUNC) &_lddmm_rdirichlet, 1},
-    {"_lddmm_count_assign", (DL_FUNC) &_lddmm_count_assign, 2},
-    {"_lddmm_sample_reff_mu", (DL_FUNC) &_lddmm_sample_reff_mu, 16},
-    {"_lddmm_sample_reff_b", (DL_FUNC) &_lddmm_sample_reff_b, 16},
+    {"_lddmm_ll_matrix", (DL_FUNC) &_lddmm_ll_matrix, 5},
+    {"_lddmm_ll_entries", (DL_FUNC) &_lddmm_ll_entries, 7},
+    {"_lddmm_update_delta_cpp", (DL_FUNC) &_lddmm_update_delta_cpp, 9},
+    {"_lddmm_update_re_cpp", (DL_FUNC) &_lddmm_update_re_cpp, 15},
+    {"_lddmm_rinvgauss_cpp", (DL_FUNC) &_lddmm_rinvgauss_cpp, 2},
     {NULL, NULL, 0}
 };
 

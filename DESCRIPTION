@@ -1,9 +1,9 @@
 Package: lddmm
 Type: Package
 Title: Longitudinal Drift-Diffusion Mixed Models (LDDMM)
-Version: 0.4.2
-Date: 2024-01-17
-Authors@R: c(person("Giorgio", "Paulon", email = "giorgio.paulon@utexas.edu",
+Version: 1.0.0
+Date: 2026-10-22
+Authors@R: c(person("Giorgio", "Paulon", email = "giorgiopaulon90@gmail.com",
                     role = c("aut", "cre")), 
              person("Abhra", "Sarkar", email = "abhra.sarkar@utexas.edu",
                     role = c("aut", "ctb")))
@@ -12,12 +12,15 @@ Depends: R (>= 4.1.0)
 Language: en-US
 License: MIT + file LICENSE
 Encoding: UTF-8
-Imports: Rcpp (>= 1.0.6), gtools, LaplacesDemon, dplyr, plyr, tidyr, ggplot2, latex2exp, reshape2, RColorBrewer
+Imports: Rcpp (>= 1.0.6), dplyr, tidyr, ggplot2 (>= 3.4.0), latex2exp, reshape2, stats, utils
 LazyData: true
-LinkingTo: Rcpp, RcppArmadillo, RcppProgress, rgen
-RoxygenNote: 7.2.3
+LinkingTo: Rcpp, RcppArmadillo
 Roxygen: list(markdown = TRUE)
 Suggests: 
     rmarkdown,
-    knitr
+    knitr,
+    testthat (>= 3.0.0),
+    statmod
+Config/testthat/edition: 3
 VignetteBuilder: knitr
+Config/roxygen2/version: 8.1.1

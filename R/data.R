@@ -1,18 +1,16 @@
-
-
 #' Example dataset
 #'
-#' A toy dataset in the correct format for the LDDMM function call. This dataset
-#' has two possible response categories.
+#' Data in the format required by [LDDMM()]: 24,254 trials of 99 participants
+#' over 5 training blocks, with two possible input stimuli and decisions. The
+#' data were analyzed in Roark, Paulon, Sarkar and Chandrasekaran (2021),
+#' Psychonomic Bulletin & Review 28, 898-909.
 #'
-#' * `subject`: vector of size n containing the participant labels
-#' * `block`: vector of size n containing the training blocks (longitudinal units)
-#' * `s`: vector of size n containing the stimuli
-#' * `d`: vector of size n containing the decisions
-#' * `r_time`: vector of size n containing the response times (log transformed)
-#' * `cens`: vector of size n containing the censoring indicators (1 censored, 0 non censored)
+#' * `subject`: participant labels
+#' * `block`: training blocks (longitudinal units)
+#' * `s`: input stimuli
+#' * `d`: decisions
+#' * `r_time`: response times, in seconds
+#' * `cens`: censoring indicators (1 censored, 0 non censored); all 0 here
 #'
-#' @format A data frame with 24,254 rows and 6 columns
-#'
+#' @format A data frame with 24,254 rows and 6 columns.
 "data"
-
