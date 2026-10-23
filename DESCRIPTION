@@ -11,6 +11,8 @@ Description: Implementation of the drift-diffusion mixed model for category lear
 Depends: R (>= 4.1.0)
 Language: en-US
 License: MIT + file LICENSE
+URL: https://github.com/giorgiopaulon/LDDMM
+BugReports: https://github.com/giorgiopaulon/LDDMM/issues
 Encoding: UTF-8
 Imports: Rcpp (>= 1.0.6), dplyr, tidyr, ggplot2 (>= 3.4.0), latex2exp, reshape2, stats, utils
 LazyData: true

@@ -67,14 +67,15 @@ plot_accuracy(data)
 
 #### Fitting the model
 
-The run below is short so that the example is quick; for an analysis use
-something like `Niter = 5000, burnin = 2000, thin = 5`.
+The run below uses chain settings suitable for an analysis and takes about
+ten minutes; for a first look, a shorter chain such as
+`Niter = 1000, burnin = 500, thin = 2` is enough.
 
 ```{r fit}
 set.seed(123)
 fit <- LDDMM(data = data,
              hypers = list(s_sigma_mu = 0.1, s_sigma_b = 0.1),
-             Niter = 1000, burnin = 500, thin = 2,
+             Niter = 5000, burnin = 2000, thin = 2,
              save_z = TRUE, verbose = FALSE)
 ```
 

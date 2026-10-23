@@ -8,6 +8,14 @@
 \description{
 Implementation of the drift-diffusion mixed model for category learning as described in Paulon et al. (2021) \doi{10.1080/01621459.2020.1801448}.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/giorgiopaulon/LDDMM}
+  \item Report bugs at \url{https://github.com/giorgiopaulon/LDDMM/issues}
+}
+
+}
 \author{
 \strong{Maintainer}: Giorgio Paulon \email{giorgiopaulon90@gmail.com}
 

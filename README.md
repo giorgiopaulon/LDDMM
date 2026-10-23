@@ -85,14 +85,15 @@ plot_accuracy(data)
 
 #### Fitting the model
 
-The run below is short so that the example is quick; for an analysis use
-something like `Niter = 5000, burnin = 2000, thin = 5`.
+The run below uses chain settings suitable for an analysis and takes
+about ten minutes; for a first look, a shorter chain such as
+`Niter = 1000, burnin = 500, thin = 2` is enough.
 
 ``` r
 set.seed(123)
 fit <- LDDMM(data = data,
              hypers = list(s_sigma_mu = 0.1, s_sigma_b = 0.1),
-             Niter = 1000, burnin = 500, thin = 2,
+             Niter = 5000, burnin = 2000, thin = 2,
              save_z = TRUE, verbose = FALSE)
 ```
 
@@ -159,11 +160,11 @@ ggplot(tidyr::pivot_longer(traces, -draw), aes(draw, value)) +
 ``` r
 round(sapply(fit$acceptance, mean), 2)
 #>        delta     beta1_mu         U_mu          U_b  sigma2_1_mu sigma2_mu_ua 
-#>         0.46         0.32         0.45         0.45         0.52         0.46 
+#>         0.45         0.34         0.45         0.45         0.49         0.38 
 #> sigma2_mu_us  sigma2_b_ua     scale_mu      scale_b    ridge_pop   ridge_subj 
-#>         0.37         0.58         0.41         0.35         0.01         0.35 
+#>         0.44         0.55         0.44         0.41         0.40         0.45 
 #>      beta1_b   sigma2_1_b  sigma2_b_us      alpha_C      alpha_I 
-#>         0.32         0.51         0.39         0.41         0.39
+#>         0.34         0.37         0.44         0.52         0.41
 ```
 
 #### Results
@@ -178,18 +179,18 @@ head(extract_post_mean(data, fit, par = 'drift'))
 #> # A tibble: 6 × 4
 #>   block subject drift_1_1 drift_2_2
 #>   <int>   <dbl>     <dbl>     <dbl>
-#> 1     1       1     0.511     0.501
-#> 2     2       1     0.508     0.496
-#> 3     3       1     0.542     0.534
-#> 4     4       1     0.585     0.599
-#> 5     5       1     0.584     0.598
-#> 6     1       2     1.07      1.05
+#> 1     1       1     0.497     0.485
+#> 2     2       1     0.494     0.485
+#> 3     3       1     0.530     0.532
+#> 4     4       1     0.570     0.599
+#> 5     5       1     0.592     0.625
+#> 6     1       2     1.10      1.07
 compute_WAIC(fit)
-#> [1] 31769.01
+#> [1] 31762.67
 # probability that the correct-response curves of the two stimuli share a
 # cluster, for each spline coefficient
 round(apply(fit$Z[1, 1, , ] == fit$Z[2, 2, , ], 1, mean), 2)
-#> [1] 0.90 0.82 0.00 0.88 0.00 0.92
+#> [1] 0.95 0.64 0.00 0.77 0.00 0.85
 ```
 
 #### Model options
